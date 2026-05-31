@@ -1,0 +1,10 @@
+# Скопируйте нужные строки в local.properties (файл уже есть у Android Studio).
+
+sdk.dir=C\:\\Users\\ВАШ_ПОЛЬЗОВАТЕЛЬ\\AppData\\Local\\Android\\Sdk
+
+# Эмулятор (по умолчанию, если строку не добавлять):
+# backend.host=10.0.2.2
+
+# Планшет / телефон в той же Wi‑Fi, что и ПК с backend:
+# Узнайте IP: cmd → ipconfig → «Адаптер беспроводной сети» → IPv4
+backend.host=192.168.1.100

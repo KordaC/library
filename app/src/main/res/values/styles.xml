@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Widget.AppLibrary.Card" parent="Widget.Material3.CardView.Elevated">
+        <item name="cardCornerRadius">@dimen/card_radius</item>
+        <item name="cardElevation">2dp</item>
+        <item name="strokeWidth">0dp</item>
+    </style>
+
+    <style name="Widget.AppLibrary.Card.Hero" parent="Widget.AppLibrary.Card">
+        <item name="cardCornerRadius">@dimen/card_radius_lg</item>
+        <item name="cardElevation">6dp</item>
+    </style>
+
+    <style name="Widget.AppLibrary.Card.Stat" parent="Widget.Material3.CardView.Filled">
+        <item name="cardCornerRadius">@dimen/card_radius</item>
+        <item name="cardBackgroundColor">?attr/colorPrimaryContainer</item>
+    </style>
+
+    <style name="Widget.AppLibrary.Card.Stat.Warning" parent="Widget.Material3.CardView.Filled">
+        <item name="cardCornerRadius">@dimen/card_radius</item>
+        <item name="cardBackgroundColor">?attr/colorSecondaryContainer</item>
+    </style>
+
+    <style name="Widget.AppLibrary.Button" parent="Widget.Material3.Button">
+        <item name="cornerRadius">12dp</item>
+        <item name="android:minHeight">52dp</item>
+    </style>
+
+    <style name="Widget.AppLibrary.TextInputLayout" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="boxCornerRadiusTopStart">12dp</item>
+        <item name="boxCornerRadiusTopEnd">12dp</item>
+        <item name="boxCornerRadiusBottomStart">12dp</item>
+        <item name="boxCornerRadiusBottomEnd">12dp</item>
+    </style>
+
+    <style name="Widget.AppLibrary.BottomNav" parent="Widget.Material3.BottomNavigationView">
+        <item name="android:background">?attr/colorSurface</item>
+        <item name="elevation">@dimen/bottom_nav_elevation</item>
+        <item name="itemActiveIndicatorStyle">@style/Widget.AppLibrary.BottomNav.ActiveIndicator</item>
+    </style>
+
+    <style name="Widget.AppLibrary.BottomNav.ActiveIndicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">?attr/colorSecondaryContainer</item>
+    </style>
+
+    <style name="Widget.AppLibrary.Toolbar" parent="Widget.Material3.Toolbar">
+        <item name="android:background">?attr/colorSurface</item>
+        <item name="titleTextAppearance">@style/TextAppearance.AppLibrary.ToolbarTitle</item>
+    </style>
+
+    <style name="TextAppearance.AppLibrary.ToolbarTitle" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="TextAppearance.AppLibrary.WelcomeTitle" parent="TextAppearance.Material3.HeadlineLarge">
+        <item name="android:textColor">@color/library_on_primary</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.AppLibrary.WelcomeSubtitle" parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:textColor">#E8F0FA</item>
+    </style>
+
+    <style name="Widget.AppLibrary.Chip.Available" parent="">
+        <item name="android:paddingStart">10dp</item>
+        <item name="android:paddingEnd">10dp</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:textAppearance">@style/TextAppearance.Material3.LabelMedium</item>
+    </style>
+</resources>

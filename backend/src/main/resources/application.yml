@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: library-backend
+  profiles:
+    default: dev
+
+server:
+  port: 8080
+  address: 0.0.0.0
+
+library:
+  jwt:
+    secret: "change-me-in-production-use-256-bit-secret-key!!"
+    expiration-hours: 24
+  qr:
+    secret: "qr-hmac-secret-for-educational-project"

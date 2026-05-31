@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/welcomeFragment">
+
+    <fragment
+        android:id="@+id/welcomeFragment"
+        android:name="com.example.applibrary.ui.welcome.WelcomeFragment"
+        android:label="@string/app_name">
+        <action
+            android:id="@+id/action_welcome_to_login"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_welcome_to_link_card"
+            app:destination="@id/linkCardFragment" />
+        <action
+            android:id="@+id/action_welcome_to_register"
+            app:destination="@id/registerFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.applibrary.ui.login.LoginFragment"
+        android:label="@string/login">
+        <action
+            android:id="@+id/action_login_to_main"
+            app:destination="@id/mainFragment"
+            app:popUpTo="@id/welcomeFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/linkCardFragment"
+        android:name="com.example.applibrary.ui.link.LinkCardFragment"
+        android:label="@string/link_card_title">
+        <action
+            android:id="@+id/action_link_to_main"
+            app:destination="@id/mainFragment"
+            app:popUpTo="@id/welcomeFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.example.applibrary.ui.register.RegisterFragment"
+        android:label="@string/register_title">
+        <action
+            android:id="@+id/action_register_to_main"
+            app:destination="@id/mainFragment"
+            app:popUpTo="@id/welcomeFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.example.applibrary.ui.main.MainFragment"
+        android:label="@string/app_name" />
+</navigation>
