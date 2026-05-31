@@ -35,6 +35,8 @@
     <string name="overdue">Просрочено</string>
     <string name="notifications">Уведомления</string>
     <string name="qr_description">QR читательского билета</string>
+    <string name="qr_scan_hint">Отсканируйте камерой — откроется страница билета</string>
+    <string name="qr_generate_error">Не удалось сформировать QR-код</string>
     <string name="status_active">Активен</string>
     <string name="status_blocked">Заблокирован</string>
     <string name="catalog">Каталог</string>
@@ -43,7 +45,7 @@
     <string name="profile_section_contacts">Контакты</string>
     <string name="search_books">Поиск по названию или автору</string>
     <string name="all_genres">Все жанры</string>
-    <string name="copies_available">Доступно экземпляров: %1$d</string>
+    <string name="copies_available">%1$d в наличии</string>
     <string name="copies_unavailable">Нет в наличии</string>
     <string name="book_detail_message">Автор: %1$s\n\n%2$s\n\nВ наличии: %3$d из %4$d\nЖанры: %5$s</string>
     <string name="loans_active">На руках</string>
@@ -57,8 +59,17 @@
     <string name="loan_overdue">Просрочено</string>
     <string name="loan_returned">Возвращено</string>
     <string name="renew_loan">Продлить</string>
-    <string name="event_places">Записано: %1$d из %2$d</string>
+    <string name="event_places">%1$d из %2$d мест</string>
+    <string name="event_places_full">Мест нет</string>
     <string name="event_register">Записаться</string>
-    <string name="event_unregister">Отменить запись</string>
+    <string name="event_unregister">Отменить</string>
+    <string name="event_registered_badge">Вы записаны</string>
     <string name="events_empty">Нет предстоящих событий</string>
+    <string name="event_type_meeting">Встреча</string>
+    <string name="event_type_reading">Чтения</string>
+    <string name="event_type_workshop">Мастер-класс</string>
+    <string name="event_type_children">Детям</string>
+    <string name="event_type_lecture">Лекция</string>
+    <string name="event_type_fair">Ярмарка</string>
+    <string name="event_type_other">Событие</string>
 </resources>

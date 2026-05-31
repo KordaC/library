@@ -1,14 +1,18 @@
 package com.example.applibrary.ui.events;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.applibrary.R;
 import com.example.applibrary.data.remote.dto.EventDtos;
 import com.example.applibrary.databinding.ItemEventBinding;
+import com.example.applibrary.ui.util.ListCardUi;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,16 +61,43 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Hold
         }
 
         void bind(EventDtos.EventItem item) {
+            var context = binding.getRoot().getContext();
             binding.textTitle.setText(item.title);
-            binding.textDate.setText(item.startsAt);
-            binding.textPlaces.setText(binding.getRoot().getContext().getString(
-                    R.string.event_places, item.registeredCount, item.capacity));
-            if (item.registeredByMe) {
-                binding.btnAction.setText(R.string.event_unregister);
+            binding.textType.setText(context.getString(ListCardUi.eventTypeLabelRes(item.type)));
+            binding.textDate.setText(ListCardUi.formatEventDate(item.startsAt));
+
+            int accentColor = ContextCompat.getColor(context, ListCardUi.eventAccentColorRes(item.type));
+            binding.headerAccent.setBackgroundColor(accentColor);
+
+            if (item.description != null && !item.description.isBlank()) {
+                binding.textDescription.setVisibility(View.VISIBLE);
+                binding.textDescription.setText(item.description);
             } else {
-                binding.btnAction.setText(R.string.event_register);
+                binding.textDescription.setVisibility(View.GONE);
             }
-            binding.btnAction.setOnClickListener(v -> listener.onAction(item));
+
+            boolean full = item.capacity > 0 && item.registeredCount >= item.capacity;
+            if (full && !item.registeredByMe) {
+                binding.textPlaces.setText(R.string.event_places_full);
+            } else {
+                binding.textPlaces.setText(context.getString(
+                        R.string.event_places, item.registeredCount, item.capacity));
+            }
+
+            binding.progressPlaces.setProgress(ListCardUi.eventProgressPercent(
+                    item.registeredCount, item.capacity), true);
+
+            binding.textRegisteredBadge.setVisibility(item.registeredByMe ? View.VISIBLE : View.GONE);
+
+            MaterialButton btn = binding.btnAction;
+            if (item.registeredByMe) {
+                btn.setText(R.string.event_unregister);
+                btn.setEnabled(true);
+            } else {
+                btn.setText(R.string.event_register);
+                btn.setEnabled(!full);
+            }
+            btn.setOnClickListener(v -> listener.onAction(item));
         }
     }
 }

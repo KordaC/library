@@ -33,6 +33,7 @@ public final class DashboardDtos {
 
     public static class QrResponse {
         public QrPayload payload;
+        public String scanUrl;
     }
 
     public static class QrPayload {

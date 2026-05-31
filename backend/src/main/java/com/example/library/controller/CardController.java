@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.UUID;
 
@@ -29,6 +30,7 @@ public class CardController {
     @GetMapping("/me/qr")
     public ApiResponse<CardDtos.QrResponse> myQr(Authentication authentication) {
         UUID userId = (UUID) authentication.getPrincipal();
-        return ApiResponse.ok(cardService.getQrForUser(userId));
+        String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
+        return ApiResponse.ok(cardService.getQrForUser(userId, baseUrl));
     }
 }

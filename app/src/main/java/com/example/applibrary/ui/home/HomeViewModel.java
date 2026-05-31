@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel;
 import com.example.applibrary.data.remote.dto.DashboardDtos;
 import com.example.applibrary.data.repository.ApiResult;
 import com.example.applibrary.data.repository.DashboardRepository;
+import com.example.applibrary.util.QrScanUrlHelper;
 
 public class HomeViewModel extends ViewModel {
 
@@ -14,7 +15,7 @@ public class HomeViewModel extends ViewModel {
     private final MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
     private final MutableLiveData<String> error = new MutableLiveData<>();
     private final MutableLiveData<DashboardDtos.DashboardResponse> dashboard = new MutableLiveData<>();
-    private final MutableLiveData<DashboardDtos.QrPayload> qrPayload = new MutableLiveData<>();
+    private final MutableLiveData<String> qrScanUrl = new MutableLiveData<>();
 
     public HomeViewModel(DashboardRepository dashboardRepository) {
         this.dashboardRepository = dashboardRepository;
@@ -32,8 +33,8 @@ public class HomeViewModel extends ViewModel {
         return dashboard;
     }
 
-    public LiveData<DashboardDtos.QrPayload> getQrPayload() {
-        return qrPayload;
+    public LiveData<String> getQrScanUrl() {
+        return qrScanUrl;
     }
 
     public void load() {
@@ -50,9 +51,12 @@ public class HomeViewModel extends ViewModel {
             ApiResult<DashboardDtos.QrResponse> qrResult = dashboardRepository.loadQr();
             if (qrResult instanceof ApiResult.Success) {
                 DashboardDtos.QrResponse qr = ((ApiResult.Success<DashboardDtos.QrResponse>) qrResult).getData();
-                if (qr != null && qr.payload != null) {
-                    qrPayload.postValue(qr.payload);
+                String url = QrScanUrlHelper.resolve(qr);
+                if (url != null) {
+                    qrScanUrl.postValue(url);
                 }
+            } else if (qrResult instanceof ApiResult.Error) {
+                error.postValue(((ApiResult.Error<DashboardDtos.QrResponse>) qrResult).getMessage());
             }
             loading.postValue(false);
         }).start();

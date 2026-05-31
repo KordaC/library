@@ -33,4 +33,13 @@
     <color name="library_gradient_start">#1B3A5C</color>
     <color name="library_gradient_end">#2D5A87</color>
     <color name="library_scrim">#66000000</color>
+
+    <color name="library_card_stroke">#E0DBD4</color>
+
+    <color name="event_accent_meeting">#1B3A5C</color>
+    <color name="event_accent_reading">#2D6A4F</color>
+    <color name="event_accent_workshop">#9A7B2F</color>
+    <color name="event_accent_children">#C77DFF</color>
+    <color name="event_accent_lecture">#2D5A87</color>
+    <color name="event_accent_fair">#B45309</color>
 </resources>

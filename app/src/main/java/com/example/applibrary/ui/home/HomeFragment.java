@@ -55,11 +55,19 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        viewModel.getQrPayload().observe(getViewLifecycleOwner(), payload -> {
-            if (payload == null) return;
-            var bitmap = QrCodeUtil.encodeObject(payload, 512);
+        viewModel.getQrScanUrl().observe(getViewLifecycleOwner(), scanUrl -> {
+            if (scanUrl == null || scanUrl.isEmpty()) {
+                binding.imageQr.setImageDrawable(null);
+                return;
+            }
+            var bitmap = QrCodeUtil.encodeText(scanUrl, 512);
             if (bitmap != null) {
                 binding.imageQr.setImageBitmap(bitmap);
+            } else {
+                binding.imageQr.setImageDrawable(null);
+                Snackbar.make(binding.getRoot(),
+                        com.example.applibrary.R.string.qr_generate_error,
+                        Snackbar.LENGTH_SHORT).show();
             }
         });
 
@@ -76,6 +84,14 @@ public class HomeFragment extends Fragment {
         if ("ACTIVE".equals(status)) return getString(com.example.applibrary.R.string.status_active);
         if ("BLOCKED".equals(status)) return getString(com.example.applibrary.R.string.status_blocked);
         return status;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (viewModel != null) {
+            viewModel.load();
+        }
     }
 
     @Override
