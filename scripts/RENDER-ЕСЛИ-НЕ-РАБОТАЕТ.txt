@@ -1,0 +1,28 @@
+Render «не просыпается» — что проверить
+======================================
+
+1. dashboard.render.com → сервис library-backend
+   Статус должен быть Live (зелёный), не Build failed / Deploy failed.
+
+2. Вкладка Logs — последние строки:
+   - «Started LibraryApplication» — ОК
+   - «Flyway» / «password authentication failed» / «gradle» — ошибка, сервис не стартует
+
+3. Manual Deploy → Deploy latest commit (после исправления Dockerfile).
+
+4. Environment → должны быть:
+   SPRING_PROFILES_ACTIVE = prod
+   DATABASE_URL = (из базы, автоматически)
+   SPRING_DATASOURCE_USERNAME / PASSWORD = из базы
+
+5. Проверка в браузере (подождите 2–3 мин после деплоя):
+   https://ВАШ-СЕРВИС.onrender.com/health
+   Должно: {"data":{"status":"ok"},...}
+
+Пока Render чините — работайте по Wi‑Fi без облака
+-------------------------------------------------
+1. В local.properties закомментируйте backend.url
+2. backend.host=IP_вашего_ПК (ipconfig)
+3. Backend на ПК: gradlew bootRun --args="--spring.profiles.active=postgres"
+4. Android Studio → Run (debug), не release
+5. Вход 20001 / Demo1234

@@ -5,6 +5,8 @@ import com.example.applibrary.data.remote.ApiResponse;
 import com.google.gson.Gson;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -24,7 +26,7 @@ public final class ApiCallHandler {
             }
             return ApiResult.error(parseError(response.errorBody()));
         } catch (IOException e) {
-            return ApiResult.error("Нет связи с сервером. Проверьте подключение к сети.");
+            return ApiResult.error(networkMessage(e));
         }
     }
 
@@ -36,8 +38,18 @@ public final class ApiCallHandler {
             }
             return ApiResult.error(parseError(response.errorBody()));
         } catch (IOException e) {
-            return ApiResult.error("Нет связи с сервером. Проверьте подключение к сети.");
+            return ApiResult.error(networkMessage(e));
         }
+    }
+
+    private static String networkMessage(IOException e) {
+        if (e instanceof SocketTimeoutException) {
+            return "Сервер долго не отвечает. На Render первый запрос после простоя может занять 1–2 минуты — попробуйте ещё раз.";
+        }
+        if (e instanceof UnknownHostException) {
+            return "Сервер не найден. Проверьте адрес backend в сборке APK (onrender.com).";
+        }
+        return "Нет связи с сервером. Проверьте интернет и что backend на Render в статусе Running.";
     }
 
     private static String parseError(ResponseBody body) {

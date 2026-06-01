@@ -8,6 +8,7 @@ import com.example.applibrary.data.repository.AuthRepository;
 import com.example.applibrary.data.repository.CatalogRepository;
 import com.example.applibrary.data.repository.DashboardRepository;
 import com.example.applibrary.data.repository.EventRepository;
+import com.example.applibrary.data.repository.HealthRepository;
 import com.example.applibrary.data.repository.LoanRepository;
 import com.example.applibrary.data.repository.ProfileRepository;
 import com.example.applibrary.data.repository.RegistrationRepository;
@@ -33,6 +34,7 @@ public class AppContainer {
     private final LoanRepository loanRepository;
     private final ProfileRepository profileRepository;
     private final EventRepository eventRepository;
+    private final HealthRepository healthRepository;
 
     public AppContainer(Context context) {
         tokenStorage = new TokenStorage(context);
@@ -43,10 +45,11 @@ public class AppContainer {
                 ? HttpLoggingInterceptor.Level.BASIC
                 : HttpLoggingInterceptor.Level.NONE);
 
+        // Render free tier: «пробуждение» 30–90 с после простоя
         OkHttpClient client = new OkHttpClient.Builder()
-                .connectTimeout(10, TimeUnit.SECONDS)
-                .readTimeout(15, TimeUnit.SECONDS)
-                .writeTimeout(15, TimeUnit.SECONDS)
+                .connectTimeout(90, TimeUnit.SECONDS)
+                .readTimeout(90, TimeUnit.SECONDS)
+                .writeTimeout(90, TimeUnit.SECONDS)
                 .addInterceptor(chain -> {
                     var request = chain.request();
                     var builder = request.newBuilder();
@@ -76,6 +79,11 @@ public class AppContainer {
         loanRepository = new LoanRepository(api);
         profileRepository = new ProfileRepository(api);
         eventRepository = new EventRepository(api);
+        healthRepository = new HealthRepository(api);
+    }
+
+    public HealthRepository getHealthRepository() {
+        return healthRepository;
     }
 
     public TokenStorage getTokenStorage() {

@@ -38,10 +38,21 @@ public class LoginFragment extends Fragment {
         viewModel = new ViewModelProvider(this, new ViewModelFactory(app, container))
                 .get(LoginViewModel.class);
 
+        binding.textServer.setText(getString(R.string.login_server, viewModel.getServerUrl()));
+
         if (BuildConfig.DEBUG) {
             binding.layoutServerUrl.setVisibility(View.VISIBLE);
             binding.inputServerUrl.setText(container.getServerUrlStorage().getEffectiveBaseUrl());
         }
+
+        viewModel.getStatus().observe(getViewLifecycleOwner(), msg -> {
+            if (msg != null && !msg.isEmpty()) {
+                binding.textStatus.setVisibility(View.VISIBLE);
+                binding.textStatus.setText(msg);
+            } else {
+                binding.textStatus.setVisibility(View.GONE);
+            }
+        });
 
         binding.btnLogin.setOnClickListener(v -> {
             if (BuildConfig.DEBUG) {

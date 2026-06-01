@@ -17,25 +17,13 @@ services:
     dockerfilePath: ./backend/Dockerfile
     dockerContext: ./backend
     plan: free
+    healthCheckPath: /health
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: prod
-      - key: SPRING_DATASOURCE_URL
+      - key: DATABASE_URL
         fromDatabase:
           name: library-db
           property: connectionString
-      - key: SPRING_DATASOURCE_USERNAME
-        fromDatabase:
-          name: library-db
-          property: user
-      - key: SPRING_DATASOURCE_PASSWORD
-        fromDatabase:
-          name: library-db
-          property: password
-      - key: LIBRARY_PUBLIC_BASE_URL
-        fromService:
-          type: web
-          name: library-backend
-          property: host
-        # host is hostname only on some plans — set manually in dashboard if QR links break:
-        # https://your-service.onrender.com
+      - key: JAVA_TOOL_OPTIONS
+        value: -XX:+UseContainerSupport -Xmx384m

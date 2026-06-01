@@ -5,6 +5,8 @@
     <string name="have_card">У меня уже есть билет</string>
     <string name="get_card">Получить билет</string>
     <string name="login">Войти</string>
+    <string name="login_retry_hint">Первый вход после простоя сервера может занять до 2 минут — нажмите «Войти» ещё раз.</string>
+    <string name="login_server">Сервер: %1$s</string>
     <string name="logout">Выйти</string>
     <string name="home">Главная</string>
     <string name="home_greeting">Добро пожаловать</string>

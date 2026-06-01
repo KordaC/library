@@ -4,6 +4,7 @@ import com.example.applibrary.data.remote.dto.AuthDtos;
 import com.example.applibrary.data.remote.dto.CatalogDtos;
 import com.example.applibrary.data.remote.dto.DashboardDtos;
 import com.example.applibrary.data.remote.dto.EventDtos;
+import com.example.applibrary.data.remote.dto.HealthDtos;
 import com.example.applibrary.data.remote.dto.LoanDtos;
 import com.example.applibrary.data.remote.dto.ProfileDtos;
 import com.example.applibrary.data.remote.dto.RegistrationDtos;
@@ -20,6 +21,9 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface LibraryApi {
+
+    @GET("health")
+    Call<ApiResponse<HealthDtos.HealthResponse>> health();
 
     @POST("auth/login")
     Call<ApiResponse<AuthDtos.LoginResponse>> login(@Body AuthDtos.LoginRequest request);

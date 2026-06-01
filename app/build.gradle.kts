@@ -10,19 +10,8 @@ val localProperties = Properties().apply {
         file.inputStream().use { load(it) }
     }
 }
-fun resolveBackendBaseUrl(props: Properties): String {
-    val explicit = props.getProperty("backend.url")?.trim()
-    if (!explicit.isNullOrEmpty()) {
-        var url = explicit.trimEnd('/')
-        if (!url.endsWith("/api/v1")) {
-            url = when {
-                url.endsWith("/api") -> "$url/v1"
-                else -> "$url/api/v1"
-            }
-        }
-        return "$url/"
-    }
-    val host = props.getProperty("backend.host")?.trim().orEmpty().ifEmpty { "10.0.2.2" }
+fun resolveFromHost(props: Properties, defaultHost: String = "10.0.2.2"): String {
+    val host = props.getProperty("backend.host")?.trim().orEmpty().ifEmpty { defaultHost }
     val https = props.getProperty("backend.https", "false")
         .equals("true", ignoreCase = true)
     val scheme = if (https) "https" else "http"
@@ -37,8 +26,33 @@ fun resolveBackendBaseUrl(props: Properties): String {
     return "$scheme://$host$portPart/api/v1/"
 }
 
-// Wi‑Fi: backend.host=192.168.x.x | LTE/ngrok: backend.url=https://xxx.ngrok-free.app/api/v1/
-val backendBaseUrl = resolveBackendBaseUrl(localProperties)
+fun resolveCloudUrl(props: Properties): String {
+    val explicit = props.getProperty("backend.url")?.trim()
+        ?: throw GradleException(
+            "Для release APK укажите в local.properties:\n" +
+                    "backend.url=https://ваш-сервер.onrender.com/api/v1/"
+        )
+    var url = explicit.trimEnd('/')
+    if (!url.endsWith("/api/v1")) {
+        url = when {
+            url.endsWith("/api") -> "$url/v1"
+            else -> "$url/api/v1"
+        }
+    }
+    return "$url/"
+}
+
+// debug → backend.host (Wi‑Fi / эмулятор), release → backend.url (Render)
+val debugBackendBaseUrl = resolveFromHost(localProperties)
+
+val keystoreProperties = Properties().apply {
+    val file = rootProject.file("keystore.properties")
+    if (file.exists()) {
+        file.inputStream().use { load(it) }
+    }
+}
+val releaseKeystoreFile = keystoreProperties.getProperty("storeFile")?.let { rootProject.file(it) }
+val hasReleaseKeystore = releaseKeystoreFile != null && releaseKeystoreFile.isFile
 
 android {
     namespace = "com.example.applibrary"
@@ -52,27 +66,38 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
 
-        buildConfigField("String", "BASE_URL", "\"$backendBaseUrl\"")
+    signingConfigs {
+        if (hasReleaseKeystore) {
+            create("release") {
+                storeFile = releaseKeystoreFile
+                storePassword = keystoreProperties.getProperty("storePassword")
+                keyAlias = keystoreProperties.getProperty("keyAlias")
+                keyPassword = keystoreProperties.getProperty("keyPassword")
+            }
+        }
     }
 
     buildTypes {
+        debug {
+            buildConfigField("String", "BASE_URL", "\"$debugBackendBaseUrl\"")
+        }
         release {
+            val cloudUrl = resolveCloudUrl(localProperties)
+            buildConfigField("String", "BASE_URL", "\"$cloudUrl\"")
+            signingConfig = if (hasReleaseKeystore) {
+                signingConfigs.getByName("release")
+            } else {
+                signingConfigs.getByName("debug")
+            }
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            val localUrl = localProperties.getProperty("backend.url")?.trim()
-            if (localUrl.isNullOrEmpty()) {
-                throw GradleException(
-                    "Для release APK укажите публичный сервер в local.properties:\n" +
-                            "backend.url=https://ваш-сервер.onrender.com/api/v1/\n" +
-                            "Инструкция: scripts/КАК-СОБРАТЬ-APK.txt"
-                )
-            }
-            if (backendBaseUrl.contains("10.0.2.2") || backendBaseUrl.contains("192.168.")
-                || backendBaseUrl.contains("localhost")
+            if (cloudUrl.contains("10.0.2.2") || cloudUrl.contains("192.168.")
+                || cloudUrl.contains("localhost")
             ) {
                 throw GradleException(
                     "backend.url должен быть публичным HTTPS-адресом облака, не локальным IP."
