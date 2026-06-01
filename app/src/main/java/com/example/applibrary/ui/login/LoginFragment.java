@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
+import com.example.applibrary.BuildConfig;
 import com.example.applibrary.LibraryApplication;
 import com.example.applibrary.R;
 import com.example.applibrary.databinding.FragmentLoginBinding;
@@ -33,10 +34,24 @@ public class LoginFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         var app = (LibraryApplication) requireActivity().getApplication();
-        viewModel = new ViewModelProvider(this, new ViewModelFactory(app.getAppContainer()))
+        var container = app.getAppContainer();
+        viewModel = new ViewModelProvider(this, new ViewModelFactory(app, container))
                 .get(LoginViewModel.class);
 
+        if (BuildConfig.DEBUG) {
+            binding.layoutServerUrl.setVisibility(View.VISIBLE);
+            binding.inputServerUrl.setText(container.getServerUrlStorage().getEffectiveBaseUrl());
+        }
+
         binding.btnLogin.setOnClickListener(v -> {
+            if (BuildConfig.DEBUG) {
+                String serverRaw = binding.inputServerUrl.getText() != null
+                        ? binding.inputServerUrl.getText().toString().trim() : "";
+                if (!serverRaw.isEmpty()) {
+                    app.getAppContainer().getServerUrlStorage().saveBaseUrl(serverRaw);
+                    app.recreateAppContainer();
+                }
+            }
             String card = binding.inputCard.getText() != null
                     ? binding.inputCard.getText().toString().trim() : "";
             String pass = binding.inputPassword.getText() != null

@@ -29,4 +29,11 @@ public class LibraryApplication extends Application {
         }
         return appContainer;
     }
+
+    /** После смены адреса сервера в профиле. */
+    public void recreateAppContainer() {
+        synchronized (this) {
+            appContainer = new AppContainer(getApplicationContext());
+        }
+    }
 }

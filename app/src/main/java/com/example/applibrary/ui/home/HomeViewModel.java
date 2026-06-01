@@ -2,14 +2,17 @@ package com.example.applibrary.ui.home;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
+import android.app.Application;
 
 import com.example.applibrary.data.remote.dto.DashboardDtos;
 import com.example.applibrary.data.repository.ApiResult;
 import com.example.applibrary.data.repository.DashboardRepository;
 import com.example.applibrary.util.QrScanUrlHelper;
 
-public class HomeViewModel extends ViewModel {
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+
+public class HomeViewModel extends AndroidViewModel {
 
     private final DashboardRepository dashboardRepository;
     private final MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
@@ -17,7 +20,8 @@ public class HomeViewModel extends ViewModel {
     private final MutableLiveData<DashboardDtos.DashboardResponse> dashboard = new MutableLiveData<>();
     private final MutableLiveData<String> qrScanUrl = new MutableLiveData<>();
 
-    public HomeViewModel(DashboardRepository dashboardRepository) {
+    public HomeViewModel(@NonNull Application application, DashboardRepository dashboardRepository) {
+        super(application);
         this.dashboardRepository = dashboardRepository;
     }
 
@@ -51,7 +55,7 @@ public class HomeViewModel extends ViewModel {
             ApiResult<DashboardDtos.QrResponse> qrResult = dashboardRepository.loadQr();
             if (qrResult instanceof ApiResult.Success) {
                 DashboardDtos.QrResponse qr = ((ApiResult.Success<DashboardDtos.QrResponse>) qrResult).getData();
-                String url = QrScanUrlHelper.resolve(qr);
+                String url = QrScanUrlHelper.resolve(getApplication(), qr);
                 if (url != null) {
                     qrScanUrl.postValue(url);
                 }

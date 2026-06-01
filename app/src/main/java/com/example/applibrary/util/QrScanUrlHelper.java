@@ -2,7 +2,8 @@ package com.example.applibrary.util;
 
 import android.util.Base64;
 
-import com.example.applibrary.BuildConfig;
+import android.content.Context;
+
 import com.example.applibrary.data.remote.dto.DashboardDtos;
 import com.google.gson.Gson;
 
@@ -14,7 +15,7 @@ public final class QrScanUrlHelper {
 
     private QrScanUrlHelper() {}
 
-    public static String resolve(DashboardDtos.QrResponse qr) {
+    public static String resolve(Context context, DashboardDtos.QrResponse qr) {
         if (qr == null) {
             return null;
         }
@@ -24,13 +25,13 @@ public final class QrScanUrlHelper {
         if (qr.payload == null) {
             return null;
         }
-        String base = serverBaseUrl();
+        String base = serverBaseUrl(context);
         String token = encodeToken(qr.payload);
         return base + "/card/ticket.html?token=" + token;
     }
 
-    private static String serverBaseUrl() {
-        String base = BuildConfig.BASE_URL.trim();
+    private static String serverBaseUrl(Context context) {
+        String base = new ServerUrlStorage(context).getEffectiveBaseUrl().trim();
         if (base.endsWith("/")) {
             base = base.substring(0, base.length() - 1);
         }

@@ -1,5 +1,7 @@
 package com.example.applibrary.ui;
 
+import android.app.Application;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -14,9 +16,11 @@ import com.example.applibrary.ui.profile.ProfileViewModel;
 
 public class ViewModelFactory implements ViewModelProvider.Factory {
 
+    private final Application application;
     private final AppContainer container;
 
-    public ViewModelFactory(AppContainer container) {
+    public ViewModelFactory(@NonNull Application application, @NonNull AppContainer container) {
+        this.application = application;
         this.container = container;
     }
 
@@ -25,10 +29,10 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
     @SuppressWarnings("unchecked")
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (modelClass.isAssignableFrom(LoginViewModel.class)) {
-            return (T) new LoginViewModel(container.getAuthRepository());
+            return (T) new LoginViewModel(application);
         }
         if (modelClass.isAssignableFrom(HomeViewModel.class)) {
-            return (T) new HomeViewModel(container.getDashboardRepository());
+            return (T) new HomeViewModel(application, container.getDashboardRepository());
         }
         if (modelClass.isAssignableFrom(CatalogViewModel.class)) {
             return (T) new CatalogViewModel(container.getCatalogRepository());

@@ -11,6 +11,7 @@ import com.example.applibrary.data.repository.EventRepository;
 import com.example.applibrary.data.repository.LoanRepository;
 import com.example.applibrary.data.repository.ProfileRepository;
 import com.example.applibrary.data.repository.RegistrationRepository;
+import com.example.applibrary.util.ServerUrlStorage;
 import com.example.applibrary.util.TokenStorage;
 
 import java.util.concurrent.TimeUnit;
@@ -23,6 +24,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class AppContainer {
 
     private final TokenStorage tokenStorage;
+    private final ServerUrlStorage serverUrlStorage;
     private final LibraryApi api;
     private final AuthRepository authRepository;
     private final RegistrationRepository registrationRepository;
@@ -34,6 +36,7 @@ public class AppContainer {
 
     public AppContainer(Context context) {
         tokenStorage = new TokenStorage(context);
+        serverUrlStorage = new ServerUrlStorage(context);
 
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(BuildConfig.DEBUG
@@ -46,19 +49,21 @@ public class AppContainer {
                 .writeTimeout(15, TimeUnit.SECONDS)
                 .addInterceptor(chain -> {
                     var request = chain.request();
+                    var builder = request.newBuilder();
                     String token = tokenStorage.getAccessToken();
                     if (token != null && !token.isEmpty()) {
-                        request = request.newBuilder()
-                                .addHeader("Authorization", "Bearer " + token)
-                                .build();
+                        builder.addHeader("Authorization", "Bearer " + token);
                     }
-                    return chain.proceed(request);
+                    if (request.url().host().contains("ngrok")) {
+                        builder.addHeader("ngrok-skip-browser-warning", "true");
+                    }
+                    return chain.proceed(builder.build());
                 })
                 .addInterceptor(logging)
                 .build();
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BuildConfig.BASE_URL)
+                .baseUrl(serverUrlStorage.getEffectiveBaseUrl())
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -75,6 +80,10 @@ public class AppContainer {
 
     public TokenStorage getTokenStorage() {
         return tokenStorage;
+    }
+
+    public ServerUrlStorage getServerUrlStorage() {
+        return serverUrlStorage;
     }
 
     public AuthRepository getAuthRepository() {

@@ -37,7 +37,7 @@ public class LoansFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         var app = (LibraryApplication) requireActivity().getApplication();
-        viewModel = new ViewModelProvider(this, new ViewModelFactory(app.getAppContainer()))
+        viewModel = new ViewModelProvider(this, new ViewModelFactory(app, app.getAppContainer()))
                 .get(LoansViewModel.class);
 
         adapter = new LoanListAdapter(true, loan -> viewModel.renew(loan.id));

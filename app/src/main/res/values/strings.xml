@@ -31,6 +31,11 @@
     <string name="set_password">Завершить регистрацию</string>
     <string name="save">Сохранить</string>
     <string name="profile_saved">Данные сохранены</string>
+    <string name="server_settings_title">Адрес сервера</string>
+    <string name="server_settings_hint">Для мобильного интернета: запустите scripts\\start-tunnel.ps1, вставьте HTTPS-адрес ngrok (…/api/v1/). Перезайдите в приложение после сохранения.</string>
+    <string name="server_url_hint">https://xxxx.ngrok-free.app/api/v1/</string>
+    <string name="server_save">Сохранить адрес</string>
+    <string name="server_saved">Адрес сохранён. Откройте снова экраны приложения.</string>
     <string name="books_on_hand">На руках</string>
     <string name="overdue">Просрочено</string>
     <string name="notifications">Уведомления</string>

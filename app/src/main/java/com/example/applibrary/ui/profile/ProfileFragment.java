@@ -13,10 +13,12 @@ import androidx.navigation.NavController;
 import androidx.navigation.NavOptions;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.example.applibrary.BuildConfig;
 import com.example.applibrary.LibraryApplication;
 import com.example.applibrary.R;
 import com.example.applibrary.databinding.FragmentProfileBinding;
 import com.example.applibrary.ui.ViewModelFactory;
+import com.example.applibrary.util.ServerUrlStorage;
 import com.google.android.material.snackbar.Snackbar;
 
 public class ProfileFragment extends Fragment {
@@ -36,8 +38,23 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         var app = (LibraryApplication) requireActivity().getApplication();
         var container = app.getAppContainer();
-        viewModel = new ViewModelProvider(this, new ViewModelFactory(container))
+        viewModel = new ViewModelProvider(this, new ViewModelFactory(app, container))
                 .get(ProfileViewModel.class);
+
+        if (BuildConfig.DEBUG) {
+            binding.cardServerSettings.setVisibility(View.VISIBLE);
+            binding.inputServerUrl.setText(container.getServerUrlStorage().getEffectiveBaseUrl());
+            binding.btnSaveServer.setOnClickListener(v -> {
+                String raw = text(binding.inputServerUrl);
+                if (raw.isEmpty()) {
+                    container.getServerUrlStorage().clear();
+                } else {
+                    container.getServerUrlStorage().saveBaseUrl(raw);
+                }
+                app.recreateAppContainer();
+                Snackbar.make(binding.getRoot(), R.string.server_saved, Snackbar.LENGTH_LONG).show();
+            });
+        }
 
         viewModel.getProfile().observe(getViewLifecycleOwner(), profile -> {
             if (profile == null) return;

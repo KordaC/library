@@ -1,0 +1,41 @@
+# Деплой backend в Render (бесплатный тариф, сервер «засыпает» без трафика).
+# https://render.com → New → Blueprint → подключить репозиторий
+#
+# После деплоя URL вида: https://library-backend-xxxx.onrender.com
+# Соберите APK с backend.url=https://library-backend-xxxx.onrender.com/api/v1/
+
+databases:
+  - name: library-db
+    plan: free
+    databaseName: library
+    user: library
+
+services:
+  - type: web
+    name: library-backend
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: free
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: SPRING_DATASOURCE_URL
+        fromDatabase:
+          name: library-db
+          property: connectionString
+      - key: SPRING_DATASOURCE_USERNAME
+        fromDatabase:
+          name: library-db
+          property: user
+      - key: SPRING_DATASOURCE_PASSWORD
+        fromDatabase:
+          name: library-db
+          property: password
+      - key: LIBRARY_PUBLIC_BASE_URL
+        fromService:
+          type: web
+          name: library-backend
+          property: host
+        # host is hostname only on some plans — set manually in dashboard if QR links break:
+        # https://your-service.onrender.com

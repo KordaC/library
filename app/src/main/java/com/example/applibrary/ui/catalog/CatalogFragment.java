@@ -42,7 +42,7 @@ public class CatalogFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         var app = (LibraryApplication) requireActivity().getApplication();
-        viewModel = new ViewModelProvider(this, new ViewModelFactory(app.getAppContainer()))
+        viewModel = new ViewModelProvider(this, new ViewModelFactory(app, app.getAppContainer()))
                 .get(CatalogViewModel.class);
 
         adapter = new BookListAdapter(this::showBookDetail);

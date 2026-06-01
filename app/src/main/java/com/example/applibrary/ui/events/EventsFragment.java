@@ -33,7 +33,7 @@ public class EventsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         var app = (LibraryApplication) requireActivity().getApplication();
-        viewModel = new ViewModelProvider(this, new ViewModelFactory(app.getAppContainer()))
+        viewModel = new ViewModelProvider(this, new ViewModelFactory(app, app.getAppContainer()))
                 .get(EventsViewModel.class);
 
         adapter = new EventListAdapter(viewModel::toggleRegistration);

@@ -7,8 +7,12 @@ spring:
 server:
   port: 8080
   address: 0.0.0.0
+  forward-headers-strategy: framework
 
 library:
+  public:
+    # Публичный URL для QR (ngrok / облако). Пример: https://xxxx.ngrok-free.app
+    base-url: ${LIBRARY_PUBLIC_BASE_URL:}
   jwt:
     secret: "change-me-in-production-use-256-bit-secret-key!!"
     expiration-hours: 24

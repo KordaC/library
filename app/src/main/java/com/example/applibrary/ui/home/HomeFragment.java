@@ -32,7 +32,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         var app = (LibraryApplication) requireActivity().getApplication();
-        viewModel = new ViewModelProvider(this, new ViewModelFactory(app.getAppContainer()))
+        viewModel = new ViewModelProvider(this, new ViewModelFactory(app, app.getAppContainer()))
                 .get(HomeViewModel.class);
 
         viewModel.getDashboard().observe(getViewLifecycleOwner(), dash -> {
