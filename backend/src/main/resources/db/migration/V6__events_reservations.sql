@@ -20,4 +20,4 @@ CREATE INDEX idx_book_reservation_card ON book_reservation(card_id, status);
 
 INSERT INTO event (id, title, type, description, starts_at, capacity) VALUES
 ('33333333-3333-3333-3333-333333333302', 'Литературный клуб', 'CLUB', 'Обсуждение классики',
- CURRENT_TIMESTAMP + INTERVAL '14 days', 20);
+ CAST((CURRENT_DATE + 14) AS TIMESTAMP), 20);

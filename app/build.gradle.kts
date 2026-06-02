@@ -26,20 +26,29 @@ fun resolveFromHost(props: Properties, defaultHost: String = "10.0.2.2"): String
     return "$scheme://$host$portPart/api/v1/"
 }
 
-fun resolveCloudUrl(props: Properties): String {
-    val explicit = props.getProperty("backend.url")?.trim()
-        ?: throw GradleException(
-            "Для release APK укажите в local.properties:\n" +
-                    "backend.url=https://ваш-сервер.onrender.com/api/v1/"
-        )
-    var url = explicit.trimEnd('/')
-    if (!url.endsWith("/api/v1")) {
-        url = when {
-            url.endsWith("/api") -> "$url/v1"
-            else -> "$url/api/v1"
+fun normalizeApiUrl(url: String): String {
+    var normalized = url.trim().trimEnd('/')
+    if (!normalized.endsWith("/api/v1")) {
+        normalized = when {
+            normalized.endsWith("/api") -> "$normalized/v1"
+            else -> "$normalized/api/v1"
         }
     }
-    return "$url/"
+    return "$normalized/"
+}
+
+fun resolveCloudUrl(local: Properties): String {
+    val cloudFile = rootProject.file("app/cloud-api.properties")
+    if (cloudFile.exists()) {
+        val cloud = Properties().apply { cloudFile.inputStream().use { load(it) } }
+        cloud.getProperty("api.url")?.trim()?.takeIf { it.isNotEmpty() }?.let {
+            return normalizeApiUrl(it)
+        }
+    }
+    local.getProperty("backend.url")?.trim()?.takeIf { it.isNotEmpty() }?.let {
+        return normalizeApiUrl(it)
+    }
+    return normalizeApiUrl("https://library-backend-n5c4.onrender.com/api/v1/")
 }
 
 // debug → backend.host (Wi‑Fi / эмулятор), release → backend.url (Render)

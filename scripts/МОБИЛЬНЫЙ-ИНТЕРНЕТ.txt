@@ -1,0 +1,38 @@
+Мобильный интернет: только APK на телефоне
+============================================
+
+ОДИН РАЗ НА ПК (вы)
+-------------------
+1. Залейте проект на GitHub.
+
+2. render.com → New → Blueprint → ваш репозиторий.
+   Дождитесь статуса Live (зелёный). Скопируйте URL, например:
+   https://library-backend-xxxx.onrender.com
+
+3. Откройте в браузере:
+   https://library-backend-xxxx.onrender.com/health
+   Должен быть ответ со status ok (может занять 1–2 мин первый раз).
+
+4. В файле app/cloud-api.properties замените URL на свой:
+   api.url=https://library-backend-xxxx.onrender.com/api/v1/
+
+5. Соберите APK:
+   cd C:\Users\timab\AndroidStudioProjects\appLibrary
+   gradlew.bat :app:assembleRelease
+
+   Файл: app\build\outputs\apk\release\app-release.apk
+
+НА ТЕЛЕФОНЕ (друзья / вы)
+-------------------------
+- Установить APK
+- Включить мобильный интернет (LTE)
+- Войти: карта 20001, пароль Demo1234
+- Ничего больше настраивать не нужно
+
+Первый вход после простоя сервера: подождите на экране входа
+до 2 минут (приложение само «разбудит» Render).
+
+Разработка дома по Wi‑Fi
+------------------------
+local.properties — только backend.host=IP_ПК, без backend.url
+Android Studio → Run (debug)

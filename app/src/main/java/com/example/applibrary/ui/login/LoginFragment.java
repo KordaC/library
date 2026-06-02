@@ -38,7 +38,12 @@ public class LoginFragment extends Fragment {
         viewModel = new ViewModelProvider(this, new ViewModelFactory(app, container))
                 .get(LoginViewModel.class);
 
-        binding.textServer.setText(getString(R.string.login_server, viewModel.getServerUrl()));
+        if (BuildConfig.DEBUG) {
+            binding.textServer.setVisibility(View.VISIBLE);
+            binding.textServer.setText(getString(R.string.login_server, viewModel.getServerUrl()));
+        } else {
+            binding.textServer.setVisibility(View.GONE);
+        }
 
         if (BuildConfig.DEBUG) {
             binding.layoutServerUrl.setVisibility(View.VISIBLE);

@@ -1,14 +1,6 @@
-# Деплой backend в Render (бесплатный тариф, сервер «засыпает» без трафика).
-# https://render.com → New → Blueprint → подключить репозиторий
-#
-# После деплоя URL вида: https://library-backend-xxxx.onrender.com
-# Соберите APK с backend.url=https://library-backend-xxxx.onrender.com/api/v1/
-
-databases:
-  - name: library-db
-    plan: free
-    databaseName: library
-    user: library
+# Один сервис, без PostgreSQL — проще стартует на Render.
+# После деплоя URL: https://library-backend-xxxx.onrender.com
+# В app/cloud-api.properties укажите тот же URL → соберите release APK.
 
 services:
   - type: web
@@ -20,10 +12,6 @@ services:
     healthCheckPath: /health
     envVars:
       - key: SPRING_PROFILES_ACTIVE
-        value: prod
-      - key: DATABASE_URL
-        fromDatabase:
-          name: library-db
-          property: connectionString
+        value: cloud
       - key: JAVA_TOOL_OPTIONS
         value: -XX:+UseContainerSupport -Xmx384m

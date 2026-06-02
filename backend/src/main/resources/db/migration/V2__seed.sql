@@ -34,7 +34,7 @@ INSERT INTO book_copy (id, book_id, inventory_number, status) VALUES
 INSERT INTO loan (id, card_id, copy_id, loan_date, due_date, returned_at, renewal_count, status) VALUES
 ('11111111-1111-1111-1111-111111111101', 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb',
  'ffffffff-ffff-ffff-ffff-ffffffffff01',
- CURRENT_DATE - INTERVAL '10 days', CURRENT_DATE + INTERVAL '4 days', NULL, 0, 'ACTIVE');
+ CURRENT_DATE - 10, CURRENT_DATE + 4, NULL, 0, 'ACTIVE');
 
 INSERT INTO notification (id, user_id, type, title, body, read_flag, created_at) VALUES
 ('22222222-2222-2222-2222-222222222201', 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
@@ -42,4 +42,4 @@ INSERT INTO notification (id, user_id, type, title, body, read_flag, created_at)
 
 INSERT INTO event (id, title, type, description, starts_at, capacity) VALUES
 ('33333333-3333-3333-3333-333333333301', 'Встреча с автором', 'MEETING', 'Обсуждение новинок',
- CURRENT_TIMESTAMP + INTERVAL '7 days', 30);
+ CAST((CURRENT_DATE + 7) AS TIMESTAMP), 30);

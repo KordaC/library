@@ -48,17 +48,15 @@ public class LoginViewModel extends AndroidViewModel {
         error.setValue(null);
         new Thread(() -> {
             var container = ((LibraryApplication) getApplication()).getAppContainer();
-            if (BuildConfig.BASE_URL.contains("onrender")) {
-                status.postValue("Подключение к серверу в облаке…");
-                if (!container.getHealthRepository().ping()) {
-                    error.postValue(
-                            "Сервер Render ещё просыпается. Откройте в браузере адрес /health, "
-                                    + "подождите 1–2 минуты и нажмите «Войти» снова.");
+            if (isCloudServer()) {
+                status.postValue("Подключение к библиотеке…");
+                if (!container.getHealthRepository().waitUntilReady()) {
+                    error.postValue("Сервер пока недоступен. Подождите минуту и нажмите «Войти» ещё раз.");
                     loading.postValue(false);
                     return;
                 }
             }
-            status.postValue(null);
+            status.postValue("Вход…");
             var auth = container.getAuthRepository();
             ApiResult<AuthDtos.LoginResponse> result = auth.login(cardNumber, password);
             if (result instanceof ApiResult.Success) {
@@ -66,7 +64,13 @@ public class LoginViewModel extends AndroidViewModel {
             } else if (result instanceof ApiResult.Error) {
                 error.postValue(((ApiResult.Error<AuthDtos.LoginResponse>) result).getMessage());
             }
+            status.postValue(null);
             loading.postValue(false);
         }).start();
+    }
+
+    private static boolean isCloudServer() {
+        String url = BuildConfig.BASE_URL.toLowerCase();
+        return url.startsWith("https://") && !url.contains("192.168.") && !url.contains("10.0.2.2");
     }
 }

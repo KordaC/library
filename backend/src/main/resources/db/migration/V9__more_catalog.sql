@@ -7,8 +7,7 @@ INSERT INTO genre (id, name) VALUES
 ('dddddddd-dddd-dddd-dddd-dddddddddd13', 'Психология'),
 ('dddddddd-dddd-dddd-dddd-dddddddddd14', 'Философия'),
 ('dddddddd-dddd-dddd-dddd-dddddddddd15', 'Роман'),
-('dddddddd-dddd-dddd-dddd-dddddddddd16', 'Юмор и сатира')
-ON CONFLICT (id) DO NOTHING;
+('dddddddd-dddd-dddd-dddd-dddddddddd16', 'Юмор и сатира');
 
 -- Книги
 INSERT INTO book (id, title, description, publication_year, isbn, author_name) VALUES
@@ -41,8 +40,7 @@ INSERT INTO book (id, title, description, publication_year, isbn, author_name) V
 ('eeeeeeee-eeee-eeee-eeee-eeeeeeeeee39', 'Унесённые ветром', 'Исторический роман', 1936, '978-5-17-000039-9', 'М. Митчелл'),
 ('eeeeeeee-eeee-eeee-eeee-eeeeeeeeee40', 'Записки из подполья', 'Повесть', 1864, '978-5-17-000040-0', 'Ф. М. Достоевский'),
 ('eeeeeeee-eeee-eeee-eeee-eeeeeeeeee41', 'Детство', 'Повесть-воспоминание', 1852, '978-5-17-000041-1', 'Л. Н. Толстой'),
-('eeeeeeee-eeee-eeee-eeee-eeeeeeeeee42', 'Записки охотника', 'Цикл очерков', 1852, '978-5-17-000042-2', 'И. С. Тургенев')
-ON CONFLICT (id) DO NOTHING;
+('eeeeeeee-eeee-eeee-eeee-eeeeeeeeee42', 'Записки охотника', 'Цикл очерков', 1852, '978-5-17-000042-2', 'И. С. Тургенев');
 
 INSERT INTO book_genre (book_id, genre_id) VALUES
 ('eeeeeeee-eeee-eeee-eeee-eeeeeeeeee13', 'dddddddd-dddd-dddd-dddd-dddddddddd01'),
@@ -94,8 +92,7 @@ INSERT INTO book_genre (book_id, genre_id) VALUES
 ('eeeeeeee-eeee-eeee-eeee-eeeeeeeeee41', 'dddddddd-dddd-dddd-dddd-dddddddddd09'),
 ('eeeeeeee-eeee-eeee-eeee-eeeeeeeeee41', 'dddddddd-dddd-dddd-dddd-dddddddddd01'),
 ('eeeeeeee-eeee-eeee-eeee-eeeeeeeeee42', 'dddddddd-dddd-dddd-dddd-dddddddddd09'),
-('eeeeeeee-eeee-eeee-eeee-eeeeeeeeee42', 'dddddddd-dddd-dddd-dddd-dddddddddd01')
-ON CONFLICT (book_id, genre_id) DO NOTHING;
+('eeeeeeee-eeee-eeee-eeee-eeeeeeeeee42', 'dddddddd-dddd-dddd-dddd-dddddddddd01');
 
 INSERT INTO book_copy (id, book_id, inventory_number, status) VALUES
 ('ffffffff-ffff-ffff-ffff-ffffffffff17', 'eeeeeeee-eeee-eeee-eeee-eeeeeeeeee13', 'INV-017', 'AVAILABLE'),
@@ -131,5 +128,4 @@ INSERT INTO book_copy (id, book_id, inventory_number, status) VALUES
 ('ffffffff-ffff-ffff-ffff-ffffffffff47', 'eeeeeeee-eeee-eeee-eeee-eeeeeeeeee39', 'INV-047', 'AVAILABLE'),
 ('ffffffff-ffff-ffff-ffff-ffffffffff48', 'eeeeeeee-eeee-eeee-eeee-eeeeeeeeee40', 'INV-048', 'AVAILABLE'),
 ('ffffffff-ffff-ffff-ffff-ffffffffff49', 'eeeeeeee-eeee-eeee-eeee-eeeeeeeeee41', 'INV-049', 'AVAILABLE'),
-('ffffffff-ffff-ffff-ffff-ffffffffff50', 'eeeeeeee-eeee-eeee-eeee-eeeeeeeeee42', 'INV-050', 'AVAILABLE')
-ON CONFLICT (id) DO NOTHING;
+('ffffffff-ffff-ffff-ffff-ffffffffff50', 'eeeeeeee-eeee-eeee-eeee-eeeeeeeeee42', 'INV-050', 'AVAILABLE');

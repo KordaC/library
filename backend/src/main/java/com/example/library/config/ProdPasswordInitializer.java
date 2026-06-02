@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.UUID;
 
 @Component
-@Profile("prod")
+@Profile({"prod", "cloud"})
 public class ProdPasswordInitializer implements ApplicationRunner {
 
     private static final UUID DEMO_USER_ID = UUID.fromString("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
