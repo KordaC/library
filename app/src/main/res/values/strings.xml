@@ -42,7 +42,11 @@
     <string name="overdue">Просрочено</string>
     <string name="notifications">Уведомления</string>
     <string name="qr_description">QR читательского билета</string>
-    <string name="qr_scan_hint">Отсканируйте камерой — откроется страница билета</string>
+    <string name="qr_scan_hint">Нажмите QR или кнопку ниже — откроется читательский билет</string>
+    <string name="open_ticket">Открыть билет</string>
+    <string name="ticket_url_missing">Ссылка на билет недоступна</string>
+    <string name="edit_contacts">Изменить контакты</string>
+    <string name="address_required">Укажите адрес проживания</string>
     <string name="qr_generate_error">Не удалось сформировать QR-код</string>
     <string name="status_active">Активен</string>
     <string name="status_blocked">Заблокирован</string>

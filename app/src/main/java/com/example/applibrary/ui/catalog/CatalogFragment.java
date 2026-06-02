@@ -22,6 +22,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CatalogFragment extends Fragment {
 
@@ -59,17 +60,21 @@ public class CatalogFragment extends Fragment {
         });
 
         viewModel.getGenres().observe(getViewLifecycleOwner(), genres -> {
+            if (!isAdded()) return;
             genreItems.clear();
             CatalogDtos.GenreItem all = new CatalogDtos.GenreItem();
             all.id = null;
             all.name = getString(R.string.all_genres);
             genreItems.add(all);
             if (genres != null) genreItems.addAll(genres);
+            List<String> names = new ArrayList<>();
+            for (CatalogDtos.GenreItem g : genreItems) {
+                names.add(g.name != null ? g.name : "");
+            }
             ArrayAdapter<String> genreAdapter = new ArrayAdapter<>(requireContext(),
-                    android.R.layout.simple_list_item_1,
-                    genreItems.stream().map(g -> g.name).toList());
+                    android.R.layout.simple_list_item_1, names);
             binding.dropdownGenre.setAdapter(genreAdapter);
-            if (genreItems.size() > 0) {
+            if (!genreItems.isEmpty()) {
                 binding.dropdownGenre.setText(genreItems.get(0).name, false);
                 selectedGenreId = genreItems.get(0).id;
             }
@@ -86,8 +91,8 @@ public class CatalogFragment extends Fragment {
         });
 
         viewModel.getBookDetail().observe(getViewLifecycleOwner(), detail -> {
-            if (detail == null) return;
-            String genres = detail.genres != null ? String.join(", ", detail.genres) : "";
+            if (detail == null || !isAdded()) return;
+            String genres = formatGenres(detail.genres);
             String message = getString(R.string.book_detail_message,
                     detail.authorName != null ? detail.authorName : "",
                     detail.description != null ? detail.description : "",
@@ -95,7 +100,7 @@ public class CatalogFragment extends Fragment {
                     detail.totalCopies,
                     genres);
             new MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(detail.title)
+                    .setTitle(detail.title != null ? detail.title : "")
                     .setMessage(message)
                     .setPositiveButton(android.R.string.ok, null)
                     .show();
@@ -113,7 +118,18 @@ public class CatalogFragment extends Fragment {
     }
 
     private void showBookDetail(CatalogDtos.BookListItem book) {
-        viewModel.loadBookDetail(book.id);
+        if (book.id != null) {
+            viewModel.loadBookDetail(book.id);
+        }
+    }
+
+    private static String formatGenres(List<String> genres) {
+        if (genres == null || genres.isEmpty()) {
+            return "";
+        }
+        return genres.stream()
+                .filter(g -> g != null && !g.isBlank())
+                .collect(Collectors.joining(", "));
     }
 
     @Override

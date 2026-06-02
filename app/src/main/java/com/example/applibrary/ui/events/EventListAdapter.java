@@ -62,7 +62,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Hold
 
         void bind(EventDtos.EventItem item) {
             var context = binding.getRoot().getContext();
-            binding.textTitle.setText(item.title);
+            binding.textTitle.setText(item.title != null ? item.title : "");
             binding.textType.setText(context.getString(ListCardUi.eventTypeLabelRes(item.type)));
             binding.textDate.setText(ListCardUi.formatEventDate(item.startsAt));
 
@@ -84,8 +84,14 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Hold
                         R.string.event_places, item.registeredCount, item.capacity));
             }
 
-            binding.progressPlaces.setProgress(ListCardUi.eventProgressPercent(
-                    item.registeredCount, item.capacity), true);
+            int progress = ListCardUi.eventProgressPercent(item.registeredCount, item.capacity);
+            if (item.capacity > 0) {
+                binding.progressPlaces.setVisibility(View.VISIBLE);
+                binding.progressPlaces.setMax(100);
+                binding.progressPlaces.setProgressCompat(progress, false);
+            } else {
+                binding.progressPlaces.setVisibility(View.GONE);
+            }
 
             binding.textRegisteredBadge.setVisibility(item.registeredByMe ? View.VISIBLE : View.GONE);
 
@@ -97,7 +103,11 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Hold
                 btn.setText(R.string.event_register);
                 btn.setEnabled(!full);
             }
-            btn.setOnClickListener(v -> listener.onAction(item));
+            btn.setOnClickListener(v -> {
+                if (item.id != null) {
+                    listener.onAction(item);
+                }
+            });
         }
     }
 }

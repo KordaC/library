@@ -45,7 +45,11 @@ public class RegisterFragment extends Fragment {
             req.birthDate = text(binding.inputBirth);
             req.passportSeries = "1234";
             req.passportNumber = "567890";
-            req.address = "г. Москва";
+            req.address = text(binding.inputAddress);
+            if (req.address.isEmpty()) {
+                Snackbar.make(binding.getRoot(), R.string.address_required, Snackbar.LENGTH_SHORT).show();
+                return;
+            }
             req.phone = text(binding.inputPhone);
             req.email = text(binding.inputEmail);
             if (req.email.isEmpty()) {

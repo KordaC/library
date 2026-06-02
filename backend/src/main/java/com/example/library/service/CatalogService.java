@@ -73,13 +73,27 @@ public class CatalogService {
 
     private BookDtos.BookListItem toListItem(Book book) {
         int available = (int) copyRepository.countByBookIdAndStatus(book.getId(), "AVAILABLE");
+        String isbn = book.getIsbn();
         return new BookDtos.BookListItem(
                 book.getId().toString(),
                 book.getTitle(),
                 book.getAuthorName(),
                 available,
-                book.getPublicationYear()
+                book.getPublicationYear(),
+                isbn,
+                coverImageUrl(isbn)
         );
+    }
+
+    private static String coverImageUrl(String isbn) {
+        if (isbn == null || isbn.isBlank()) {
+            return null;
+        }
+        String digits = isbn.replaceAll("[^0-9Xx]", "");
+        if (digits.length() < 10) {
+            return null;
+        }
+        return "https://covers.openlibrary.org/b/isbn/" + digits + "-M.jpg";
     }
 
     private int compareSort(BookDtos.BookListItem a, BookDtos.BookListItem b, String sort) {

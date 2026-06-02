@@ -27,5 +27,14 @@
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.applibrary.ui.profile.ProfileFragment"
-        android:label="@string/profile" />
+        android:label="@string/profile">
+        <action
+            android:id="@+id/action_profile_to_edit_contacts"
+            app:destination="@id/editContactsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/editContactsFragment"
+        android:name="com.example.applibrary.ui.profile.EditContactsFragment"
+        android:label="@string/edit_contacts" />
 </navigation>

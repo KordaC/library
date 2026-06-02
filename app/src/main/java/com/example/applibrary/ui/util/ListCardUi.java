@@ -1,6 +1,7 @@
 package com.example.applibrary.ui.util;
 
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.ColorRes;
@@ -9,6 +10,9 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 
 import com.example.applibrary.R;
+
+import coil.Coil;
+import coil.request.ImageRequest;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -27,6 +31,8 @@ public final class ListCardUi {
 
     private static final DateTimeFormatter EVENT_OUTPUT =
             DateTimeFormatter.ofPattern("d MMMM yyyy, HH:mm", new Locale("ru"));
+    private static final DateTimeFormatter EVENT_DATE_ONLY =
+            DateTimeFormatter.ofPattern("d MMMM yyyy", new Locale("ru"));
 
     private ListCardUi() {}
 
@@ -50,6 +56,43 @@ public final class ListCardUi {
         }
     }
 
+    public static void bindBookCoverImage(
+            @NonNull ImageView coverImage,
+            @NonNull View coverContainer,
+            @NonNull TextView initialView,
+            @NonNull TextView yearView,
+            @Nullable String coverImageUrl,
+            @Nullable String title,
+            @Nullable String author,
+            @Nullable Integer publicationYear
+    ) {
+        bindBookCover(coverContainer, initialView, yearView, title, author, publicationYear);
+        if (coverImageUrl == null || coverImageUrl.isBlank()) {
+            coverImage.setVisibility(View.GONE);
+            initialView.setVisibility(View.VISIBLE);
+            return;
+        }
+        coverImage.setVisibility(View.VISIBLE);
+        initialView.setVisibility(View.INVISIBLE);
+        coverContainer.setBackgroundResource(R.drawable.bg_cover_image_frame);
+        Coil.imageLoader(coverImage.getContext())
+                .enqueue(new ImageRequest.Builder(coverImage.getContext())
+                        .data(coverImageUrl)
+                        .target(coverImage)
+                        .crossfade(true)
+                        .listener(new ImageRequest.Listener() {
+                            @Override
+                            public void onError(@NonNull ImageRequest request,
+                                                @NonNull coil.request.ErrorResult result) {
+                                coverImage.setVisibility(View.GONE);
+                                initialView.setVisibility(View.VISIBLE);
+                                bindBookCover(coverContainer, initialView, yearView,
+                                        title, author, publicationYear);
+                            }
+                        })
+                        .build());
+    }
+
     @NonNull
     public static String formatEventDate(@Nullable String startsAt) {
         if (startsAt == null || startsAt.isBlank()) {
@@ -57,6 +100,9 @@ public final class ListCardUi {
         }
         try {
             LocalDateTime dt = LocalDateTime.parse(startsAt);
+            if (dt.getHour() == 0 && dt.getMinute() == 0) {
+                return EVENT_DATE_ONLY.format(dt) + ", 18:00";
+            }
             return EVENT_OUTPUT.format(dt);
         } catch (DateTimeParseException e) {
             return startsAt.replace('T', ' ');

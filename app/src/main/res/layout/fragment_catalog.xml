@@ -30,7 +30,7 @@
         android:layout_marginTop="@dimen/spacing_sm"
         android:hint="@string/all_genres">
 
-        <AutoCompleteTextView
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
             android:id="@+id/dropdown_genre"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

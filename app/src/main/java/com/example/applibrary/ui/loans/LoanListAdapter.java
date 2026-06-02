@@ -21,12 +21,16 @@ public class LoanListAdapter extends RecyclerView.Adapter<LoanListAdapter.Holder
     }
 
     private final List<LoanDtos.LoanItem> items = new ArrayList<>();
-    private final boolean showRenew;
+    private boolean showRenew;
     private final OnRenewListener renewListener;
 
     public LoanListAdapter(boolean showRenew, OnRenewListener renewListener) {
         this.showRenew = showRenew;
         this.renewListener = renewListener;
+    }
+
+    public void setShowRenew(boolean showRenew) {
+        this.showRenew = showRenew;
     }
 
     public void submit(List<LoanDtos.LoanItem> loans) {
@@ -61,7 +65,7 @@ public class LoanListAdapter extends RecyclerView.Adapter<LoanListAdapter.Holder
         }
 
         void bind(LoanDtos.LoanItem loan) {
-            binding.textTitle.setText(loan.bookTitle);
+            binding.textTitle.setText(loan.bookTitle != null ? loan.bookTitle : "");
             String author = loan.authorName != null && !loan.authorName.isEmpty()
                     ? loan.authorName + "\n" : "";
             if ("RETURNED".equals(loan.status)) {

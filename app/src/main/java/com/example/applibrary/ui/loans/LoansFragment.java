@@ -40,7 +40,11 @@ public class LoansFragment extends Fragment {
         viewModel = new ViewModelProvider(this, new ViewModelFactory(app, app.getAppContainer()))
                 .get(LoansViewModel.class);
 
-        adapter = new LoanListAdapter(true, loan -> viewModel.renew(loan.id));
+        adapter = new LoanListAdapter(true, loan -> {
+            if (loan.id != null) {
+                viewModel.renew(loan.id);
+            }
+        });
         binding.recyclerLoans.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.recyclerLoans.setAdapter(adapter);
 
@@ -90,8 +94,7 @@ public class LoansFragment extends Fragment {
     }
 
     private void updateListDisplay(List<com.example.applibrary.data.remote.dto.LoanDtos.LoanItem> list) {
-        adapter = new LoanListAdapter(showingActive, loan -> viewModel.renew(loan.id));
-        binding.recyclerLoans.setAdapter(adapter);
+        adapter.setShowRenew(showingActive);
         adapter.submit(list);
         boolean empty = list == null || list.isEmpty();
         binding.textEmpty.setVisibility(empty ? View.VISIBLE : View.GONE);

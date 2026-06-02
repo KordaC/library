@@ -17,6 +17,8 @@ public final class CatalogDtos {
         public String authorName;
         public int availableCount;
         public Integer publicationYear;
+        public String isbn;
+        public String coverImageUrl;
     }
 
     public static class BookDetail {

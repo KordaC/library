@@ -98,21 +98,6 @@
                     android:textAppearance="?attr/textAppearanceBodyLarge"
                     tools:text="1990-05-15" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_sm"
-                    android:text="@string/address"
-                    android:textAppearance="?attr/textAppearanceLabelMedium"
-                    android:textColor="?attr/colorOnSurfaceVariant" />
-
-                <TextView
-                    android:id="@+id/text_address"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:textAppearance="?attr/textAppearanceBodyLarge"
-                    tools:text="г. Москва, ул. Примерная, 1" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -134,41 +119,45 @@
                     android:text="@string/profile_section_contacts"
                     android:textAppearance="?attr/textAppearanceTitleMedium" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.AppLibrary.TextInputLayout"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_md"
-                    android:hint="@string/email">
+                    android:text="@string/email"
+                    android:textAppearance="?attr/textAppearanceLabelMedium"
+                    android:textColor="?attr/colorOnSurfaceVariant" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/input_email"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="textEmailAddress" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.AppLibrary.TextInputLayout"
+                <TextView
+                    android:id="@+id/text_email"
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:textAppearance="?attr/textAppearanceBodyLarge"
+                    tools:text="demo@library.local" />
+
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_sm"
-                    android:hint="@string/phone">
+                    android:text="@string/phone"
+                    android:textAppearance="?attr/textAppearanceLabelMedium"
+                    android:textColor="?attr/colorOnSurfaceVariant" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/input_phone"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="phone" />
-                </com.google.android.material.textfield.TextInputLayout>
+                <TextView
+                    android:id="@+id/text_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:textAppearance="?attr/textAppearanceBodyLarge"
+                    tools:text="+79001234567" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_save"
-                    style="@style/Widget.AppLibrary.Button"
+                    android:id="@+id/btn_edit_contacts"
+                    style="@style/Widget.Material3.Button.TonalButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_md"
-                    android:text="@string/save" />
+                    android:text="@string/edit_contacts" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 

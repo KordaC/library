@@ -63,12 +63,14 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.Holder
         }
 
         void bind(CatalogDtos.BookListItem book) {
-            binding.textTitle.setText(book.title);
+            binding.textTitle.setText(book.title != null ? book.title : "");
             binding.textAuthor.setText(book.authorName != null ? book.authorName : "");
-            ListCardUi.bindBookCover(
+            ListCardUi.bindBookCoverImage(
+                    binding.imageCover,
                     binding.coverContainer,
                     binding.textCoverInitial,
                     binding.textYear,
+                    book.coverImageUrl,
                     book.title,
                     book.authorName,
                     book.publicationYear);
@@ -86,7 +88,11 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.Holder
                     ? R.color.library_on_tertiary_container
                     : R.color.library_on_surface_variant);
             binding.textAvailability.setTextColor(textColor);
-            binding.getRoot().setOnClickListener(v -> listener.onBookClick(book));
+            binding.getRoot().setOnClickListener(v -> {
+                if (book.id != null) {
+                    listener.onBookClick(book);
+                }
+            });
         }
     }
 }

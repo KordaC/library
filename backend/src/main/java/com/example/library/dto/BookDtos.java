@@ -13,7 +13,9 @@ public final class BookDtos {
             String title,
             String authorName,
             int availableCount,
-            Integer publicationYear
+            Integer publicationYear,
+            String isbn,
+            String coverImageUrl
     ) {}
 
     public record BookDetail(

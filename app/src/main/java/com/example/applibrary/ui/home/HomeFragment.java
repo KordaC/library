@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.applibrary.LibraryApplication;
 import com.example.applibrary.databinding.FragmentHomeBinding;
 import com.example.applibrary.ui.ViewModelFactory;
+import com.example.applibrary.util.BrowserUtil;
 import com.example.applibrary.util.QrCodeUtil;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -20,6 +21,7 @@ public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
     private HomeViewModel viewModel;
+    private String lastTicketUrl;
 
     @Nullable
     @Override
@@ -56,10 +58,13 @@ public class HomeFragment extends Fragment {
         });
 
         viewModel.getQrScanUrl().observe(getViewLifecycleOwner(), scanUrl -> {
+            lastTicketUrl = scanUrl;
             if (scanUrl == null || scanUrl.isEmpty()) {
                 binding.imageQr.setImageDrawable(null);
+                binding.btnOpenTicket.setEnabled(false);
                 return;
             }
+            binding.btnOpenTicket.setEnabled(true);
             var bitmap = QrCodeUtil.encodeText(scanUrl, 512);
             if (bitmap != null) {
                 binding.imageQr.setImageBitmap(bitmap);
@@ -70,6 +75,10 @@ public class HomeFragment extends Fragment {
                         Snackbar.LENGTH_SHORT).show();
             }
         });
+
+        View.OnClickListener openTicket = v -> BrowserUtil.openUrl(requireContext(), lastTicketUrl);
+        binding.imageQr.setOnClickListener(openTicket);
+        binding.btnOpenTicket.setOnClickListener(openTicket);
 
         viewModel.getError().observe(getViewLifecycleOwner(), msg -> {
             if (msg != null && !msg.isEmpty()) {

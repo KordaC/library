@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.NavOptions;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.Navigation;
 
 import com.example.applibrary.BuildConfig;
 import com.example.applibrary.LibraryApplication;
@@ -65,11 +66,10 @@ public class ProfileFragment extends Fragment {
             binding.textBirthDate.setText(
                     profile.birthDate != null && !profile.birthDate.isEmpty()
                             ? profile.birthDate : "—");
-            binding.textAddress.setText(
-                    profile.address != null && !profile.address.isEmpty()
-                            ? profile.address : "—");
-            binding.inputEmail.setText(profile.email != null ? profile.email : "");
-            binding.inputPhone.setText(profile.phone != null ? profile.phone : "");
+            binding.textEmail.setText(
+                    profile.email != null && !profile.email.isEmpty() ? profile.email : "—");
+            binding.textPhone.setText(
+                    profile.phone != null && !profile.phone.isEmpty() ? profile.phone : "—");
         });
 
         viewModel.getLoading().observe(getViewLifecycleOwner(), loading ->
@@ -81,14 +81,9 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        viewModel.getMessage().observe(getViewLifecycleOwner(), msg -> {
-            if ("saved".equals(msg)) {
-                Snackbar.make(binding.getRoot(), R.string.profile_saved, Snackbar.LENGTH_SHORT).show();
-            }
-        });
-
-        binding.btnSave.setOnClickListener(v -> viewModel.save(
-                text(binding.inputEmail), text(binding.inputPhone)));
+        binding.btnEditContacts.setOnClickListener(v ->
+                Navigation.findNavController(binding.getRoot())
+                        .navigate(R.id.action_profile_to_edit_contacts));
 
         binding.btnLogout.setOnClickListener(v -> {
             container.getAuthRepository().logout();

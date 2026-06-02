@@ -94,6 +94,7 @@ android {
         }
         release {
             val cloudUrl = resolveCloudUrl(localProperties)
+            println("Release APK → BASE_URL = $cloudUrl")
             buildConfigField("String", "BASE_URL", "\"$cloudUrl\"")
             signingConfig = if (hasReleaseKeystore) {
                 signingConfigs.getByName("release")
@@ -141,6 +142,8 @@ dependencies {
     implementation(libs.zxing.core)
     implementation(libs.recyclerview)
     implementation(libs.splashscreen)
+    implementation(libs.coil)
+    implementation(libs.browser)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

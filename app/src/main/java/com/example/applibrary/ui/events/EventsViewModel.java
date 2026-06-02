@@ -17,6 +17,7 @@ public class EventsViewModel extends ViewModel {
     private final MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
     private final MutableLiveData<String> error = new MutableLiveData<>();
     private final MutableLiveData<List<EventDtos.EventItem>> events = new MutableLiveData<>(new ArrayList<>());
+    private volatile boolean actionInProgress;
 
     public EventsViewModel(EventRepository eventRepository) {
         this.eventRepository = eventRepository;
@@ -40,14 +41,22 @@ public class EventsViewModel extends ViewModel {
     }
 
     public void toggleRegistration(EventDtos.EventItem item) {
+        if (item == null || item.id == null || actionInProgress) {
+            return;
+        }
+        actionInProgress = true;
         new Thread(() -> {
-            ApiResult<?> result = item.registeredByMe
-                    ? eventRepository.unregister(item.id)
-                    : eventRepository.register(item.id);
-            if (result instanceof ApiResult.Error) {
-                error.postValue(((ApiResult.Error<?>) result).getMessage());
-            } else {
-                load();
+            try {
+                ApiResult<?> result = item.registeredByMe
+                        ? eventRepository.unregister(item.id)
+                        : eventRepository.register(item.id);
+                if (result instanceof ApiResult.Error) {
+                    error.postValue(((ApiResult.Error<?>) result).getMessage());
+                } else {
+                    load();
+                }
+            } finally {
+                actionInProgress = false;
             }
         }).start();
     }

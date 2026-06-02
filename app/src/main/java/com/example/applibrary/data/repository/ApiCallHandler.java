@@ -1,5 +1,6 @@
 package com.example.applibrary.data.repository;
 
+import com.example.applibrary.BuildConfig;
 import com.example.applibrary.data.remote.ApiErrorBody;
 import com.example.applibrary.data.remote.ApiResponse;
 import com.google.gson.Gson;
@@ -47,7 +48,13 @@ public final class ApiCallHandler {
             return "Сервер долго не отвечает. На Render первый запрос после простоя может занять 1–2 минуты — попробуйте ещё раз.";
         }
         if (e instanceof UnknownHostException) {
-            return "Сервер не найден. Проверьте адрес backend в сборке APK (onrender.com).";
+            String host = e.getMessage() != null ? e.getMessage() : "";
+            if (host.contains("192.168.") || host.contains("10.0.2.2") || host.contains("localhost")) {
+                return "Установлена debug-сборка (адрес ПК в Wi‑Fi). "
+                        + "Нужен app-release.apk из assembleRelease, не Run из Android Studio.";
+            }
+            return "Сервер не найден: " + BuildConfig.BASE_URL
+                    + " Проверьте URL на Render и в app/cloud-api.properties, затем пересоберите release.";
         }
         return "Нет связи с сервером. Проверьте интернет и что backend на Render в статусе Running.";
     }
