@@ -83,4 +83,23 @@
     <string name="event_type_lecture">Лекция</string>
     <string name="event_type_fair">Ярмарка</string>
     <string name="event_type_other">Событие</string>
+    <string name="settings">Настройки</string>
+    <string name="settings_appearance">Внешний вид</string>
+    <string name="settings_theme">Тема</string>
+    <string name="settings_theme_system">Как в системе</string>
+    <string name="settings_theme_light">Светлая</string>
+    <string name="settings_theme_dark">Тёмная</string>
+    <string name="settings_language">Язык</string>
+    <string name="settings_lang_system">Как в системе</string>
+    <string name="settings_lang_ru">Русский</string>
+    <string name="settings_lang_en">English</string>
+    <string name="settings_qr">QR-билет</string>
+    <string name="settings_qr_brightness">Максимальная яркость при показе QR</string>
+    <string name="settings_apply_hint">Тема и язык применяются сразу.</string>
+    <string name="qr_fullscreen_title">Читательский билет</string>
+    <string name="qr_zoom_hint">Двойное нажатие или жест «щипок» для увеличения</string>
+    <string name="qr_tap_enlarge">Нажмите QR для увеличения</string>
+    <string name="close">Закрыть</string>
+    <string name="book_detail_meta">В наличии: %1$d из %2$d</string>
+    <string name="book_detail_genres">Жанры: %1$s</string>
 </resources>

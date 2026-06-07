@@ -5,19 +5,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.example.applibrary.LibraryApplication;
 import com.example.applibrary.R;
 import com.example.applibrary.data.remote.dto.CatalogDtos;
 import com.example.applibrary.databinding.FragmentCatalogBinding;
 import com.example.applibrary.ui.ViewModelFactory;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.example.applibrary.ui.util.ListCardUi;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -47,7 +50,7 @@ public class CatalogFragment extends Fragment {
                 .get(CatalogViewModel.class);
 
         adapter = new BookListAdapter(this::showBookDetail);
-        binding.recyclerBooks.setLayoutManager(new LinearLayoutManager(requireContext()));
+        binding.recyclerBooks.setLayoutManager(new GridLayoutManager(requireContext(), 2));
         binding.recyclerBooks.setAdapter(adapter);
 
         viewModel.getBooks().observe(getViewLifecycleOwner(), adapter::submit);
@@ -92,23 +95,57 @@ public class CatalogFragment extends Fragment {
 
         viewModel.getBookDetail().observe(getViewLifecycleOwner(), detail -> {
             if (detail == null || !isAdded()) return;
-            String genres = formatGenres(detail.genres);
-            String message = getString(R.string.book_detail_message,
-                    detail.authorName != null ? detail.authorName : "",
-                    detail.description != null ? detail.description : "",
-                    detail.availableCount,
-                    detail.totalCopies,
-                    genres);
-            new MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(detail.title != null ? detail.title : "")
-                    .setMessage(message)
-                    .setPositiveButton(android.R.string.ok, null)
-                    .show();
+            showBookDetailSheet(detail);
             viewModel.clearBookDetail();
         });
 
         viewModel.loadGenres();
         viewModel.search("", null);
+    }
+
+    private void showBookDetailSheet(CatalogDtos.BookDetail detail) {
+        View sheet = LayoutInflater.from(requireContext())
+                .inflate(R.layout.bottom_sheet_book_detail, null, false);
+
+        TextView title = sheet.findViewById(R.id.detail_title);
+        TextView author = sheet.findViewById(R.id.detail_author);
+        TextView meta = sheet.findViewById(R.id.detail_meta);
+        TextView genres = sheet.findViewById(R.id.detail_genres);
+        TextView description = sheet.findViewById(R.id.detail_description);
+        View coverContainer = sheet.findViewById(R.id.detail_cover_container);
+        ImageView coverImage = sheet.findViewById(R.id.detail_image_cover);
+        TextView coverInitial = sheet.findViewById(R.id.detail_cover_initial);
+
+        title.setText(detail.title != null ? detail.title : "");
+        author.setText(detail.authorName != null ? detail.authorName : "");
+        meta.setText(getString(R.string.book_detail_meta, detail.availableCount, detail.totalCopies));
+        String genreText = formatGenres(detail.genres);
+        if (genreText.isEmpty()) {
+            genres.setVisibility(View.GONE);
+        } else {
+            genres.setVisibility(View.VISIBLE);
+            genres.setText(getString(R.string.book_detail_genres, genreText));
+        }
+        if (detail.description != null && !detail.description.isBlank()) {
+            description.setText(detail.description);
+        } else {
+            description.setVisibility(View.GONE);
+        }
+
+        TextView yearView = sheet.findViewById(R.id.detail_text_year);
+        ListCardUi.bindBookCoverImage(
+                coverImage,
+                coverContainer,
+                coverInitial,
+                yearView,
+                detail.coverImageUrl,
+                detail.title,
+                detail.authorName,
+                detail.publicationYear);
+
+        BottomSheetDialog dialog = new BottomSheetDialog(requireContext());
+        dialog.setContentView(sheet);
+        dialog.show();
     }
 
     private void doSearch() {

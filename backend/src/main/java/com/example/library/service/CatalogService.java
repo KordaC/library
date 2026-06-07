@@ -67,7 +67,8 @@ public class CatalogService {
                 book.getIsbn(),
                 (int) available,
                 (int) total,
-                genres
+                genres,
+                coverImageUrl(book.getIsbn())
         );
     }
 

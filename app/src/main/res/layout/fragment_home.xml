@@ -41,24 +41,38 @@
                 android:orientation="vertical"
                 android:padding="@dimen/spacing_lg">
 
-                <FrameLayout
+                <com.google.android.material.card.MaterialCardView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_qr_frame"
-                    android:padding="12dp">
+                    app:cardBackgroundColor="@android:color/white"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="2dp"
+                    app:strokeColor="@color/library_card_stroke"
+                    app:strokeWidth="1dp">
 
                     <ImageView
                         android:id="@+id/image_qr"
-                        android:layout_width="200dp"
-                        android:layout_height="200dp"
+                        android:layout_width="220dp"
+                        android:layout_height="220dp"
                         android:contentDescription="@string/qr_description"
+                        android:foreground="?attr/selectableItemBackgroundBorderless"
+                        android:padding="16dp"
                         android:scaleType="fitCenter" />
-                </FrameLayout>
+                </com.google.android.material.card.MaterialCardView>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_sm"
+                    android:layout_marginTop="@dimen/spacing_xs"
+                    android:gravity="center"
+                    android:text="@string/qr_tap_enlarge"
+                    android:textAppearance="?attr/textAppearanceLabelMedium"
+                    android:textColor="?attr/colorPrimary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_xs"
                     android:gravity="center"
                     android:text="@string/qr_scan_hint"
                     android:textAppearance="?attr/textAppearanceBodySmall"

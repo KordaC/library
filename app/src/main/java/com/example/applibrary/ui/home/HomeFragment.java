@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.applibrary.LibraryApplication;
 import com.example.applibrary.databinding.FragmentHomeBinding;
 import com.example.applibrary.ui.ViewModelFactory;
+import com.example.applibrary.ui.qr.QrFullscreenDialog;
 import com.example.applibrary.util.BrowserUtil;
 import com.example.applibrary.util.QrCodeUtil;
 import com.google.android.material.snackbar.Snackbar;
@@ -22,6 +23,7 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
     private HomeViewModel viewModel;
     private String lastTicketUrl;
+    private String lastCardNumber = "";
 
     @Nullable
     @Override
@@ -43,6 +45,7 @@ public class HomeFragment extends Fragment {
                 binding.textName.setText(dash.user.fullName);
             }
             if (dash.card != null) {
+                lastCardNumber = dash.card.number != null ? dash.card.number : "";
                 binding.textCardNumber.setText(getString(
                         com.example.applibrary.R.string.card_number_format, dash.card.number));
                 binding.chipCardStatus.setText(statusLabel(dash.card.status));
@@ -76,9 +79,8 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        View.OnClickListener openTicket = v -> BrowserUtil.openUrl(requireContext(), lastTicketUrl);
-        binding.imageQr.setOnClickListener(openTicket);
-        binding.btnOpenTicket.setOnClickListener(openTicket);
+        binding.imageQr.setOnClickListener(v -> openQrFullscreen());
+        binding.btnOpenTicket.setOnClickListener(v -> BrowserUtil.openUrl(requireContext(), lastTicketUrl));
 
         viewModel.getError().observe(getViewLifecycleOwner(), msg -> {
             if (msg != null && !msg.isEmpty()) {
@@ -87,6 +89,14 @@ public class HomeFragment extends Fragment {
         });
 
         viewModel.load();
+    }
+
+    private void openQrFullscreen() {
+        if (lastTicketUrl == null || lastTicketUrl.isEmpty()) {
+            return;
+        }
+        QrFullscreenDialog.newInstance(lastTicketUrl, lastCardNumber)
+                .show(getChildFragmentManager(), "qr_fullscreen");
     }
 
     private String statusLabel(String status) {

@@ -27,7 +27,8 @@ public final class BookDtos {
             String isbn,
             int availableCount,
             int totalCopies,
-            List<String> genres
+            List<String> genres,
+            String coverImageUrl
     ) {}
 
     public record RenewResponse(String loanId, String newDueDate, int renewalCount) {}

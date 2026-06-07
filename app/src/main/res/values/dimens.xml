@@ -8,4 +8,5 @@
     <dimen name="card_radius">16dp</dimen>
     <dimen name="card_radius_lg">24dp</dimen>
     <dimen name="bottom_nav_elevation">8dp</dimen>
+    <dimen name="book_cover_height">168dp</dimen>
 </resources>

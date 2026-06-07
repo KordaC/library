@@ -31,5 +31,6 @@ public final class CatalogDtos {
         public int availableCount;
         public int totalCopies;
         public List<String> genres;
+        public String coverImageUrl;
     }
 }

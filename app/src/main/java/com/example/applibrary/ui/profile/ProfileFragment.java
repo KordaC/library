@@ -85,6 +85,10 @@ public class ProfileFragment extends Fragment {
                 Navigation.findNavController(binding.getRoot())
                         .navigate(R.id.action_profile_to_edit_contacts));
 
+        binding.cardSettings.setOnClickListener(v ->
+                Navigation.findNavController(binding.getRoot())
+                        .navigate(R.id.action_profile_to_settings));
+
         binding.btnLogout.setOnClickListener(v -> {
             container.getAuthRepository().logout();
             NavHostFragment navHost = (NavHostFragment) requireActivity()

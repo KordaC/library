@@ -44,6 +44,7 @@
         android:layout_marginTop="@dimen/spacing_md"
         android:layout_weight="1"
         android:clipToPadding="false"
+        android:paddingHorizontal="@dimen/spacing_xs"
         android:paddingBottom="@dimen/spacing_sm"
         android:scrollbars="vertical" />
 
