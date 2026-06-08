@@ -32,4 +32,6 @@ public final class BookDtos {
     ) {}
 
     public record RenewResponse(String loanId, String newDueDate, int renewalCount) {}
+
+    public record UpdateCoverRequest(String coverImageUrl) {}
 }

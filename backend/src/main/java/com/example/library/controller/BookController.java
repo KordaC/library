@@ -36,4 +36,12 @@ public class BookController {
     public ApiResponse<BookDtos.BookDetail> book(@PathVariable UUID id) {
         return ApiResponse.ok(catalogService.getBook(id));
     }
+
+    @PatchMapping("/books/{id}/cover")
+    public ApiResponse<BookDtos.BookDetail> updateCover(
+            @PathVariable UUID id,
+            @RequestBody BookDtos.UpdateCoverRequest request
+    ) {
+        return ApiResponse.ok(catalogService.updateCover(id, request.coverImageUrl()));
+    }
 }

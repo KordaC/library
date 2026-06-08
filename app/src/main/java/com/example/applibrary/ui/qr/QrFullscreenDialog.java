@@ -16,8 +16,8 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.applibrary.R;
 import com.example.applibrary.databinding.DialogQrFullscreenBinding;
-import com.example.applibrary.ui.ticket.TicketInfoDialog;
 import com.example.applibrary.util.AppSettingsStorage;
+import com.example.applibrary.util.BrowserUtil;
 import com.example.applibrary.util.QrCodeUtil;
 
 public class QrFullscreenDialog extends DialogFragment {
@@ -92,9 +92,8 @@ public class QrFullscreenDialog extends DialogFragment {
 
         binding.btnClose.setOnClickListener(v -> dismiss());
         binding.btnOpenTicket.setOnClickListener(v -> {
+            BrowserUtil.openUrl(requireContext(), url);
             dismiss();
-            TicketInfoDialog.newInstance(fullName, card, status, validUntil)
-                    .show(getParentFragmentManager(), "ticket_info");
         });
         binding.getRoot().setOnClickListener(v -> dismiss());
         binding.cardQr.setOnClickListener(v -> { /* consume */ });

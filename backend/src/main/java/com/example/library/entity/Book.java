@@ -23,6 +23,9 @@ public class Book {
 
     private String isbn;
 
+    @Column(name = "cover_image_url", length = 512)
+    private String coverImageUrl;
+
     @PrePersist
     void prePersist() {
         if (id == null) id = UUID.randomUUID();
@@ -40,4 +43,6 @@ public class Book {
     public void setPublicationYear(Integer publicationYear) { this.publicationYear = publicationYear; }
     public String getIsbn() { return isbn; }
     public void setIsbn(String isbn) { this.isbn = isbn; }
+    public String getCoverImageUrl() { return coverImageUrl; }
+    public void setCoverImageUrl(String coverImageUrl) { this.coverImageUrl = coverImageUrl; }
 }

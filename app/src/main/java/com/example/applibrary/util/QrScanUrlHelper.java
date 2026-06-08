@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.util.Base64;
 
+import com.example.applibrary.BuildConfig;
 import com.example.applibrary.data.remote.dto.DashboardDtos;
 import com.google.gson.Gson;
 
@@ -14,29 +15,25 @@ public final class QrScanUrlHelper {
     private static final Gson GSON = new Gson();
     private static final String APP_SCHEME = "applibrary";
     private static final String APP_HOST = "ticket";
+    private static final String TICKET_PATH = "/card/ticket.html";
 
     private QrScanUrlHelper() {}
 
-    /** URL, который кодируется в QR: открывает приложение при сканировании. */
+    /** HTTPS-ссылка для QR и браузера — при сканировании открывается страница билета. */
     public static String resolve(Context context, DashboardDtos.QrResponse qr) {
-        String token = resolveToken(context, qr);
-        if (token == null || token.isEmpty()) {
-            return null;
-        }
-        return Uri.parse(APP_SCHEME + "://" + APP_HOST)
-                .buildUpon()
-                .appendQueryParameter("token", token)
-                .build()
-                .toString();
+        return webTicketUrl(context, qr);
     }
 
-    /** HTTPS-ссылка для браузера (библиотекарь без приложения). */
     public static String webTicketUrl(Context context, DashboardDtos.QrResponse qr) {
         String token = resolveToken(context, qr);
         if (token == null || token.isEmpty()) {
             return null;
         }
-        return Uri.parse(serverBaseUrl(context) + "/card/ticket.html")
+        if (qr != null && qr.scanUrl != null && qr.scanUrl.startsWith("https://")) {
+            return qr.scanUrl;
+        }
+        String base = serverBaseUrl(context);
+        return Uri.parse(base + TICKET_PATH)
                 .buildUpon()
                 .appendQueryParameter("token", token)
                 .build()
@@ -68,6 +65,28 @@ public final class QrScanUrlHelper {
 
     private static String serverBaseUrl(Context context) {
         String base = new ServerUrlStorage(context).getEffectiveBaseUrl().trim();
+        if (base.endsWith("/")) {
+            base = base.substring(0, base.length() - 1);
+        }
+        if (base.endsWith("/api/v1")) {
+            base = base.substring(0, base.length() - "/api/v1".length());
+        }
+        if (isLocalUrl(base)) {
+            base = cloudBaseFromBuildConfig();
+        }
+        return base;
+    }
+
+    private static boolean isLocalUrl(String base) {
+        String lower = base.toLowerCase();
+        return lower.contains("192.168.")
+                || lower.contains("10.0.2.2")
+                || lower.contains("localhost")
+                || lower.startsWith("http://");
+    }
+
+    private static String cloudBaseFromBuildConfig() {
+        String base = BuildConfig.BASE_URL.trim();
         if (base.endsWith("/")) {
             base = base.substring(0, base.length() - 1);
         }

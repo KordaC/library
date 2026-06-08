@@ -68,25 +68,40 @@ public class CatalogService {
                 (int) available,
                 (int) total,
                 genres,
-                coverImageUrl(book.getIsbn())
+                resolveCoverUrl(book)
         );
+    }
+
+    @Transactional
+    public BookDtos.BookDetail updateCover(UUID bookId, String coverImageUrl) {
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new ApiException("NOT_FOUND", "Книга не найдена", HttpStatus.NOT_FOUND));
+        book.setCoverImageUrl(coverImageUrl != null ? coverImageUrl.trim() : null);
+        bookRepository.save(book);
+        return getBook(bookId);
     }
 
     private BookDtos.BookListItem toListItem(Book book) {
         int available = (int) copyRepository.countByBookIdAndStatus(book.getId(), "AVAILABLE");
-        String isbn = book.getIsbn();
         return new BookDtos.BookListItem(
                 book.getId().toString(),
                 book.getTitle(),
                 book.getAuthorName(),
                 available,
                 book.getPublicationYear(),
-                isbn,
-                coverImageUrl(isbn)
+                book.getIsbn(),
+                resolveCoverUrl(book)
         );
     }
 
-    private static String coverImageUrl(String isbn) {
+    private static String resolveCoverUrl(Book book) {
+        if (book.getCoverImageUrl() != null && !book.getCoverImageUrl().isBlank()) {
+            return book.getCoverImageUrl();
+        }
+        return coverImageUrlFromIsbn(book.getIsbn());
+    }
+
+    private static String coverImageUrlFromIsbn(String isbn) {
         if (isbn == null || isbn.isBlank()) {
             return null;
         }
