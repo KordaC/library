@@ -109,7 +109,7 @@ public class CatalogService {
         if (digits.length() < 10) {
             return null;
         }
-        return "https://covers.openlibrary.org/b/isbn/" + digits + "-M.jpg";
+        return "https://covers.openlibrary.org/b/isbn/" + digits + "-L.jpg";
     }
 
     private int compareSort(BookDtos.BookListItem a, BookDtos.BookListItem b, String sort) {

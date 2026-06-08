@@ -15,7 +15,7 @@ import com.example.applibrary.R;
 import com.example.applibrary.databinding.FragmentHomeBinding;
 import com.example.applibrary.ui.ViewModelFactory;
 import com.example.applibrary.ui.qr.QrFullscreenDialog;
-import com.example.applibrary.util.BrowserUtil;
+import com.example.applibrary.ui.ticket.TicketInfoDialog;
 import com.example.applibrary.util.InputMasks;
 import com.example.applibrary.util.QrCodeUtil;
 import com.google.android.material.snackbar.Snackbar;
@@ -90,7 +90,7 @@ public class HomeFragment extends Fragment {
         });
 
         binding.imageQr.setOnClickListener(v -> openQrFullscreen());
-        binding.btnOpenTicket.setOnClickListener(v -> openTicketInBrowser());
+        binding.btnOpenTicket.setOnClickListener(v -> openTicketInApp());
 
         viewModel.getError().observe(getViewLifecycleOwner(), msg -> {
             if (msg != null && !msg.isEmpty()) {
@@ -114,12 +114,17 @@ public class HomeFragment extends Fragment {
                 .show(getParentFragmentManager(), "qr_fullscreen");
     }
 
-    private void openTicketInBrowser() {
-        if (lastTicketUrl == null || lastTicketUrl.isEmpty()) {
+    private void openTicketInApp() {
+        if (lastCardNumber.isEmpty() && lastFullName.isEmpty()) {
             Snackbar.make(binding.getRoot(), R.string.ticket_url_missing, Snackbar.LENGTH_SHORT).show();
             return;
         }
-        BrowserUtil.openUrl(requireContext(), lastTicketUrl);
+        TicketInfoDialog.newInstance(
+                        lastFullName,
+                        lastCardNumber,
+                        lastCardStatus,
+                        lastValidUntil)
+                .show(getParentFragmentManager(), "ticket_info");
     }
 
     private String statusLabel(String status) {

@@ -59,21 +59,38 @@ public class CardViewController {
 
     private static String cardBody(CardDtos.QrCardView view) {
         String statusLabel = statusLabel(view.status());
+        String statusClass = "ACTIVE".equals(view.status()) ? "status-active" : "status-blocked";
+        String cardNumber = formatCardNumber(view.cardNumber());
         return """
-                <p class="badge">Проверка пройдена</p>
-                <h1>%s</h1>
-                <dl>
-                  <dt>Номер билета</dt><dd>%s</dd>
-                  <dt>Статус</dt><dd><span class="status">%s</span></dd>
-                  <dt>Код действует до</dt><dd>%s</dd>
-                </dl>
+                <div class="plastic-card">
+                  <div class="chip"></div>
+                  <div class="logo" aria-hidden="true">📚</div>
+                  <p class="library">Городская библиотека</p>
+                  <h1>Читательский билет</h1>
+                  <p class="number">%s</p>
+                  <p class="holder">%s</p>
+                  <span class="status %s">%s</span>
+                  <p class="valid">QR до %s</p>
+                </div>
                 <p class="hint">Данные получены по подписанному QR-коду библиотеки.</p>
                 """.formatted(
+                esc(cardNumber),
                 esc(view.fullName()),
-                esc(view.cardNumber()),
+                statusClass,
                 esc(statusLabel),
                 esc(view.validUntil())
         );
+    }
+
+    private static String formatCardNumber(String cardNumber) {
+        if (cardNumber == null || cardNumber.isBlank()) {
+            return "—";
+        }
+        String digits = cardNumber.replaceAll("\\s+", "");
+        if (digits.length() == 5) {
+            return digits.substring(0, 2) + " " + digits.substring(2);
+        }
+        return digits;
     }
 
     private static String errorBody(String message) {
@@ -114,31 +131,74 @@ public class CardViewController {
                     * { box-sizing: border-box; }
                     body {
                       font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-                      margin: 0; min-height: 100vh; display: flex; align-items: center;
-                      justify-content: center; padding: 24px;
-                      background: linear-gradient(160deg, #1B3A5C 0%%, #2D5A87 45%%, #F7F4EF 45%%);
+                      margin: 0; min-height: 100vh; display: flex; flex-direction: column;
+                      align-items: center; justify-content: center; gap: 16px; padding: 24px;
+                      background: radial-gradient(circle at top, #2D5A87 0%%, #0F2840 55%%, #1C1B1A 100%%);
                     }
-                    .card {
-                      background: #FFFCF8; border-radius: 20px; padding: 28px 24px;
-                      max-width: 400px; width: 100%%; box-shadow: 0 12px 40px rgba(0,0,0,.18);
+                    .wrap { width: min(100%%, 420px); }
+                    .plastic-card {
+                      position: relative; aspect-ratio: 1.586 / 1; width: 100%%;
+                      border-radius: 16px; padding: 20px;
+                      background: linear-gradient(135deg, #1B3A5C 0%%, #2D5A87 50%%, #0F2840 100%%);
+                      box-shadow: 0 16px 40px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.15);
+                      color: #fff; overflow: hidden;
                     }
-                    .badge {
-                      display: inline-block; margin: 0 0 12px; padding: 6px 12px;
-                      border-radius: 20px; background: #B7E4C7; color: #0D3321;
+                    .plastic-card::before {
+                      content: ""; position: absolute; top: 0; left: 0; right: 0; height: 5px;
+                      background: linear-gradient(90deg, #9A7B2F, #F5E6C8, #9A7B2F);
+                    }
+                    .plastic-card::after {
+                      content: ""; position: absolute; inset: 0;
+                      background: linear-gradient(315deg, rgba(255,255,255,.14), transparent 45%%);
+                      pointer-events: none;
+                    }
+                    .chip {
+                      width: 40px; height: 30px; border-radius: 4px;
+                      background: linear-gradient(135deg, #D4AF37, #9A7B2F);
+                      border: 1px solid rgba(255,255,255,.25);
+                    }
+                    .logo {
+                      position: absolute; top: 20px; right: 20px; font-size: 24px;
+                    }
+                    .library {
+                      margin: 14px 0 0; font-size: 11px; letter-spacing: .12em;
+                      text-transform: uppercase; color: rgba(255,255,255,.7);
+                    }
+                    .plastic-card h1 {
+                      margin: 4px 0 0; font-size: 18px; font-weight: 700; color: #fff;
+                    }
+                    .number {
+                      position: absolute; left: 20px; right: 20px; bottom: 78px;
+                      margin: 0; font: 700 28px/1.1 ui-monospace, SFMono-Regular, Menlo, monospace;
+                      letter-spacing: .08em; color: #F5E6C8;
+                    }
+                    .holder {
+                      position: absolute; left: 20px; right: 20px; bottom: 52px;
+                      margin: 0; font-size: 16px; color: #fff;
+                    }
+                    .status {
+                      position: absolute; left: 20px; bottom: 24px;
+                      display: inline-block; padding: 4px 10px; border-radius: 12px;
                       font-size: 13px; font-weight: 600;
                     }
-                    h1 { margin: 0 0 20px; font-size: 22px; color: #1B3A5C; line-height: 1.3; }
-                    dl { margin: 0; }
-                    dt { font-size: 12px; text-transform: uppercase; letter-spacing: .04em;
-                         color: #7A756C; margin-top: 14px; }
-                    dd { margin: 4px 0 0; font-size: 17px; color: #1C1B1A; }
-                    .status { color: #2D6A4F; font-weight: 600; }
-                    .hint { margin: 24px 0 0; font-size: 13px; color: #7A756C; line-height: 1.4; }
-                    .error { color: #BA1A1A; font-size: 16px; margin: 0; }
+                    .status-active { background: #B7E4C7; color: #0D3321; }
+                    .status-blocked { background: #E8E4DD; color: #4A4640; }
+                    .valid {
+                      position: absolute; right: 20px; bottom: 28px; margin: 0;
+                      font-size: 12px; color: rgba(255,255,255,.72); text-align: right;
+                    }
+                    .hint {
+                      margin: 0; font-size: 13px; color: rgba(255,255,255,.72);
+                      line-height: 1.4; text-align: center;
+                    }
+                    .error {
+                      background: #FFFCF8; border-radius: 16px; padding: 24px;
+                      color: #BA1A1A; font-size: 16px; margin: 0;
+                    }
                   </style>
                 </head>
                 <body>
-                  <div class="card">%s</div>
+                  <div class="wrap">%s</div>
                 </body>
                 </html>
                 """.formatted(esc(title), body);

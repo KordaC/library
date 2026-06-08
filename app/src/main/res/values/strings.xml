@@ -55,8 +55,11 @@
     <string name="overdue">Просрочено</string>
     <string name="notifications">Уведомления</string>
     <string name="qr_description">QR читательского билета</string>
-    <string name="qr_scan_hint">Нажмите QR для увеличения. При сканировании камерой откроется страница читательского билета в браузере.</string>
-    <string name="open_ticket">Открыть билет в браузере</string>
+    <string name="qr_scan_hint">Нажмите QR для увеличения. При сканировании другим устройством откроется билет в браузере.</string>
+    <string name="open_ticket">Открыть билет</string>
+    <string name="ticket_card_library">Городская библиотека</string>
+    <string name="ticket_card_title">Читательский билет</string>
+    <string name="ticket_card_valid_format">QR до %1$s</string>
     <string name="browser_missing">Не найден браузер для открытия билета</string>
     <string name="ticket_info_title">Читательский билет</string>
     <string name="ticket_info_name_label">ФИО</string>

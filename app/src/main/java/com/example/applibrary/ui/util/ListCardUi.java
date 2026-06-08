@@ -13,6 +13,8 @@ import com.example.applibrary.R;
 
 import coil.Coil;
 import coil.request.ImageRequest;
+import coil.size.Scale;
+import coil.size.ViewSizeResolvers;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -75,10 +77,14 @@ public final class ListCardUi {
         coverImage.setVisibility(View.VISIBLE);
         initialView.setVisibility(View.INVISIBLE);
         coverContainer.setBackgroundResource(R.drawable.bg_cover_image_frame);
+        String url = toLargeCoverUrl(coverImageUrl);
         Coil.imageLoader(coverImage.getContext())
                 .enqueue(new ImageRequest.Builder(coverImage.getContext())
-                        .data(coverImageUrl)
+                        .data(url)
                         .target(coverImage)
+                        .size(ViewSizeResolvers.create(coverImage))
+                        .scale(Scale.FIT)
+                        .allowHardware(false)
                         .crossfade(true)
                         .listener(new ImageRequest.Listener() {
                             @Override
@@ -91,6 +97,11 @@ public final class ListCardUi {
                             }
                         })
                         .build());
+    }
+
+    @NonNull
+    private static String toLargeCoverUrl(@NonNull String url) {
+        return url.replace("-S.jpg", "-L.jpg").replace("-M.jpg", "-L.jpg");
     }
 
     @NonNull
