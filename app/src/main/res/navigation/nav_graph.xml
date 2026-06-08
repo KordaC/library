@@ -46,7 +46,25 @@
         android:name="com.example.applibrary.ui.register.RegisterFragment"
         android:label="@string/register_title">
         <action
-            android:id="@+id/action_register_to_main"
+            android:id="@+id/action_register_to_payment"
+            app:destination="@id/paymentFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/paymentFragment"
+        android:name="com.example.applibrary.ui.register.PaymentFragment"
+        android:label="@string/payment_title">
+        <action
+            android:id="@+id/action_payment_to_password"
+            app:destination="@id/registerPasswordFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/registerPasswordFragment"
+        android:name="com.example.applibrary.ui.register.RegisterPasswordFragment"
+        android:label="@string/set_password">
+        <action
+            android:id="@+id/action_password_to_main"
             app:destination="@id/mainFragment"
             app:popUpTo="@id/welcomeFragment"
             app:popUpToInclusive="true" />

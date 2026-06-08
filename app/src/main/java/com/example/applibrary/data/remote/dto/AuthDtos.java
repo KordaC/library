@@ -5,11 +5,11 @@ public final class AuthDtos {
     private AuthDtos() {}
 
     public static class LoginRequest {
-        public String cardNumber;
+        public String login;
         public String password;
 
-        public LoginRequest(String cardNumber, String password) {
-            this.cardNumber = cardNumber;
+        public LoginRequest(String login, String password) {
+            this.login = login;
             this.password = password;
         }
     }

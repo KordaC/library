@@ -43,7 +43,7 @@ public class LoginViewModel extends AndroidViewModel {
         return BuildConfig.BASE_URL;
     }
 
-    public void login(String cardNumber, String password) {
+    public void login(String login, String password) {
         loading.setValue(true);
         error.setValue(null);
         new Thread(() -> {
@@ -58,7 +58,7 @@ public class LoginViewModel extends AndroidViewModel {
             }
             status.postValue("Вход…");
             var auth = container.getAuthRepository();
-            ApiResult<AuthDtos.LoginResponse> result = auth.login(cardNumber, password);
+            ApiResult<AuthDtos.LoginResponse> result = auth.login(login, password);
             if (result instanceof ApiResult.Success) {
                 success.postValue(((ApiResult.Success<AuthDtos.LoginResponse>) result).getData());
             } else if (result instanceof ApiResult.Error) {

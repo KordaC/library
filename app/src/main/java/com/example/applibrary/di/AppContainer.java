@@ -12,6 +12,7 @@ import com.example.applibrary.data.repository.HealthRepository;
 import com.example.applibrary.data.repository.LoanRepository;
 import com.example.applibrary.data.repository.ProfileRepository;
 import com.example.applibrary.data.repository.RegistrationRepository;
+import com.example.applibrary.util.ProfilePhotoStorage;
 import com.example.applibrary.util.ServerUrlStorage;
 import com.example.applibrary.util.TokenStorage;
 
@@ -26,6 +27,7 @@ public class AppContainer {
 
     private final TokenStorage tokenStorage;
     private final ServerUrlStorage serverUrlStorage;
+    private final ProfilePhotoStorage profilePhotoStorage;
     private final LibraryApi api;
     private final AuthRepository authRepository;
     private final RegistrationRepository registrationRepository;
@@ -39,6 +41,7 @@ public class AppContainer {
     public AppContainer(Context context) {
         tokenStorage = new TokenStorage(context);
         serverUrlStorage = new ServerUrlStorage(context);
+        profilePhotoStorage = new ProfilePhotoStorage(context);
 
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(BuildConfig.DEBUG
@@ -92,6 +95,10 @@ public class AppContainer {
 
     public ServerUrlStorage getServerUrlStorage() {
         return serverUrlStorage;
+    }
+
+    public ProfilePhotoStorage getProfilePhotoStorage() {
+        return profilePhotoStorage;
     }
 
     public AuthRepository getAuthRepository() {

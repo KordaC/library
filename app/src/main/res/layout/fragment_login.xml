@@ -43,14 +43,13 @@
                     style="@style/Widget.AppLibrary.TextInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/card_number">
+                    android:hint="@string/login_identifier">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/input_card"
+                        android:id="@+id/input_login"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="number"
-                        android:maxLength="5" />
+                        android:inputType="text" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout

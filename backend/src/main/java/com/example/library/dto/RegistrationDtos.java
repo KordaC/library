@@ -30,7 +30,7 @@ public final class RegistrationDtos {
             @NotNull LocalDate birthDate,
             @NotBlank @Pattern(regexp = "\\d{4}") String passportSeries,
             @NotBlank @Pattern(regexp = "\\d{6}") String passportNumber,
-            @NotBlank String address,
+            String address,
             @NotBlank String phone,
             @NotBlank @Email String email
     ) {}

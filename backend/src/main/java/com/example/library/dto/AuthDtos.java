@@ -9,7 +9,7 @@ public final class AuthDtos {
     private AuthDtos() {}
 
     public record LoginRequest(
-            @NotBlank @Pattern(regexp = "\\d{5}") String cardNumber,
+            @NotBlank String login,
             @NotBlank @Size(min = 8) String password
     ) {}
 

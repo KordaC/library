@@ -14,9 +14,9 @@ public class AuthRepository {
         this.tokenStorage = tokenStorage;
     }
 
-    public ApiResult<AuthDtos.LoginResponse> login(String cardNumber, String password) {
+    public ApiResult<AuthDtos.LoginResponse> login(String login, String password) {
         ApiResult<AuthDtos.LoginResponse> result = ApiCallHandler.execute(
-                api.login(new AuthDtos.LoginRequest(cardNumber, password)));
+                api.login(new AuthDtos.LoginRequest(login, password)));
         if (result instanceof ApiResult.Success) {
             persistSession(((ApiResult.Success<AuthDtos.LoginResponse>) result).getData());
         }

@@ -4,8 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -27,10 +25,22 @@ public class SettingsFragment extends Fragment {
             AppSettingsStorage.THEME_DARK
     };
 
+    private final int[] themeRadioIds = {
+            R.id.radio_theme_system,
+            R.id.radio_theme_light,
+            R.id.radio_theme_dark
+    };
+
     private final String[] langValues = {
             AppSettingsStorage.LANG_SYSTEM,
             AppSettingsStorage.LANG_RU,
             AppSettingsStorage.LANG_EN
+    };
+
+    private final int[] langRadioIds = {
+            R.id.radio_lang_system,
+            R.id.radio_lang_ru,
+            R.id.radio_lang_en
     };
 
     @Nullable
@@ -46,35 +56,25 @@ public class SettingsFragment extends Fragment {
         settings = new AppSettingsStorage(requireContext());
         suppressCallbacks = true;
 
-        String[] themeLabels = {
-                getString(R.string.settings_theme_system),
-                getString(R.string.settings_theme_light),
-                getString(R.string.settings_theme_dark)
-        };
-        String[] langLabels = {
-                getString(R.string.settings_lang_system),
-                getString(R.string.settings_lang_ru),
-                getString(R.string.settings_lang_en)
-        };
-
-        binding.dropdownTheme.setAdapter(new ArrayAdapter<>(
-                requireContext(), android.R.layout.simple_list_item_1, themeLabels));
-        binding.dropdownLanguage.setAdapter(new ArrayAdapter<>(
-                requireContext(), android.R.layout.simple_list_item_1, langLabels));
-
-        binding.dropdownTheme.setText(labelFor(themeLabels, themeValues, settings.getTheme()), false);
-        binding.dropdownLanguage.setText(labelFor(langLabels, langValues, settings.getLanguage()), false);
+        selectRadio(binding.groupTheme, themeRadioIds, themeValues, settings.getTheme());
+        selectRadio(binding.groupLanguage, langRadioIds, langValues, settings.getLanguage());
         binding.switchQrBrightness.setChecked(settings.isQrBrightnessBoost());
 
-        binding.dropdownTheme.setOnItemClickListener((parent, v, position, id) -> {
+        binding.groupTheme.setOnCheckedChangeListener((group, checkedId) -> {
             if (suppressCallbacks) return;
-            settings.setTheme(themeValues[position]);
-            restartForSettings();
+            String value = valueForRadio(themeRadioIds, themeValues, checkedId);
+            if (value != null && !value.equals(settings.getTheme())) {
+                settings.setTheme(value);
+                restartForSettings();
+            }
         });
-        binding.dropdownLanguage.setOnItemClickListener((parent, v, position, id) -> {
+        binding.groupLanguage.setOnCheckedChangeListener((group, checkedId) -> {
             if (suppressCallbacks) return;
-            settings.setLanguage(langValues[position]);
-            restartForSettings();
+            String value = valueForRadio(langRadioIds, langValues, checkedId);
+            if (value != null && !value.equals(settings.getLanguage())) {
+                settings.setLanguage(value);
+                restartForSettings();
+            }
         });
         binding.switchQrBrightness.setOnCheckedChangeListener((button, checked) -> {
             if (suppressCallbacks) return;
@@ -84,18 +84,28 @@ public class SettingsFragment extends Fragment {
         suppressCallbacks = false;
     }
 
+    private void selectRadio(android.widget.RadioGroup group, int[] radioIds, String[] values, String current) {
+        for (int i = 0; i < values.length; i++) {
+            if (values[i].equals(current)) {
+                group.check(radioIds[i]);
+                return;
+            }
+        }
+        group.check(radioIds[0]);
+    }
+
+    private static String valueForRadio(int[] radioIds, String[] values, int checkedId) {
+        for (int i = 0; i < radioIds.length; i++) {
+            if (radioIds[i] == checkedId) {
+                return values[i];
+            }
+        }
+        return null;
+    }
+
     private void restartForSettings() {
         AppSettingsApplier.apply(requireContext());
         requireActivity().recreate();
-    }
-
-    private static String labelFor(String[] labels, String[] values, String current) {
-        for (int i = 0; i < values.length; i++) {
-            if (values[i].equals(current)) {
-                return labels[i];
-            }
-        }
-        return labels[0];
     }
 
     @Override

@@ -98,7 +98,8 @@ public class RegistrationService {
         entity.setBirthDate(request.birthDate());
         entity.setPassportSeries(request.passportSeries());
         entity.setPassportNumber(request.passportNumber());
-        entity.setAddress(request.address());
+        entity.setAddress(request.address() != null && !request.address().isBlank()
+                ? request.address() : "");
         entity.setPhone(request.phone());
         entity.setEmail(request.email());
         entity.setStatus("PENDING_PAYMENT");

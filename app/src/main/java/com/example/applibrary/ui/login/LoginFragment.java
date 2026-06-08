@@ -16,6 +16,7 @@ import com.example.applibrary.LibraryApplication;
 import com.example.applibrary.R;
 import com.example.applibrary.databinding.FragmentLoginBinding;
 import com.example.applibrary.ui.ViewModelFactory;
+import com.example.applibrary.util.InputMasks;
 import com.google.android.material.snackbar.Snackbar;
 
 public class LoginFragment extends Fragment {
@@ -64,11 +65,14 @@ public class LoginFragment extends Fragment {
                     app.recreateAppContainer();
                 }
             }
-            String card = binding.inputCard.getText() != null
-                    ? binding.inputCard.getText().toString().trim() : "";
+            String login = binding.inputLogin.getText() != null
+                    ? binding.inputLogin.getText().toString().trim() : "";
+            if (!login.contains("@") && !login.matches("\\d{5}")) {
+                login = InputMasks.normalizePhone(login);
+            }
             String pass = binding.inputPassword.getText() != null
                     ? binding.inputPassword.getText().toString() : "";
-            viewModel.login(card, pass);
+            viewModel.login(login, pass);
         });
 
         viewModel.getLoading().observe(getViewLifecycleOwner(), loading ->
