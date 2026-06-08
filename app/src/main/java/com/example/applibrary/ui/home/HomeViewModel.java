@@ -19,6 +19,7 @@ public class HomeViewModel extends AndroidViewModel {
     private final MutableLiveData<String> error = new MutableLiveData<>();
     private final MutableLiveData<DashboardDtos.DashboardResponse> dashboard = new MutableLiveData<>();
     private final MutableLiveData<String> qrScanUrl = new MutableLiveData<>();
+    private final MutableLiveData<DashboardDtos.QrPayload> qrPayload = new MutableLiveData<>();
 
     public HomeViewModel(@NonNull Application application, DashboardRepository dashboardRepository) {
         super(application);
@@ -41,9 +42,13 @@ public class HomeViewModel extends AndroidViewModel {
         return qrScanUrl;
     }
 
+    public LiveData<DashboardDtos.QrPayload> getQrPayload() {
+        return qrPayload;
+    }
+
     public void load() {
-        loading.setValue(true);
-        error.setValue(null);
+        loading.postValue(true);
+        error.postValue(null);
         new Thread(() -> {
             ApiResult<DashboardDtos.DashboardResponse> dashResult = dashboardRepository.loadDashboard();
             if (dashResult instanceof ApiResult.Success) {
@@ -55,6 +60,9 @@ public class HomeViewModel extends AndroidViewModel {
             ApiResult<DashboardDtos.QrResponse> qrResult = dashboardRepository.loadQr();
             if (qrResult instanceof ApiResult.Success) {
                 DashboardDtos.QrResponse qr = ((ApiResult.Success<DashboardDtos.QrResponse>) qrResult).getData();
+                if (qr.payload != null) {
+                    qrPayload.postValue(qr.payload);
+                }
                 String url = QrScanUrlHelper.resolve(getApplication(), qr);
                 if (url != null) {
                     qrScanUrl.postValue(url);

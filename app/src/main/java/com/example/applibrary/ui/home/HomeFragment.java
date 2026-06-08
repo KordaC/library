@@ -11,10 +11,12 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.applibrary.LibraryApplication;
+import com.example.applibrary.R;
 import com.example.applibrary.databinding.FragmentHomeBinding;
 import com.example.applibrary.ui.ViewModelFactory;
 import com.example.applibrary.ui.qr.QrFullscreenDialog;
-import com.example.applibrary.util.BrowserUtil;
+import com.example.applibrary.ui.ticket.TicketInfoDialog;
+import com.example.applibrary.util.InputMasks;
 import com.example.applibrary.util.QrCodeUtil;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -23,7 +25,10 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
     private HomeViewModel viewModel;
     private String lastTicketUrl;
+    private String lastFullName = "";
     private String lastCardNumber = "";
+    private String lastCardStatus = "";
+    private String lastValidUntil = "";
 
     @Nullable
     @Override
@@ -41,13 +46,14 @@ public class HomeFragment extends Fragment {
 
         viewModel.getDashboard().observe(getViewLifecycleOwner(), dash -> {
             if (dash == null) return;
-            if (dash.user != null) {
+            if (dash.user != null && dash.user.fullName != null) {
+                lastFullName = dash.user.fullName;
                 binding.textName.setText(dash.user.fullName);
             }
             if (dash.card != null) {
                 lastCardNumber = dash.card.number != null ? dash.card.number : "";
-                binding.textCardNumber.setText(getString(
-                        com.example.applibrary.R.string.card_number_format, dash.card.number));
+                lastCardStatus = dash.card.status != null ? dash.card.status : "";
+                binding.textCardNumber.setText(getString(R.string.card_number_format, dash.card.number));
                 binding.chipCardStatus.setText(statusLabel(dash.card.status));
             }
             if (dash.loans != null) {
@@ -73,14 +79,18 @@ public class HomeFragment extends Fragment {
                 binding.imageQr.setImageBitmap(bitmap);
             } else {
                 binding.imageQr.setImageDrawable(null);
-                Snackbar.make(binding.getRoot(),
-                        com.example.applibrary.R.string.qr_generate_error,
-                        Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(binding.getRoot(), R.string.qr_generate_error, Snackbar.LENGTH_SHORT).show();
+            }
+        });
+
+        viewModel.getQrPayload().observe(getViewLifecycleOwner(), payload -> {
+            if (payload != null && payload.exp > 0) {
+                lastValidUntil = InputMasks.formatQrValidUntil(payload.exp);
             }
         });
 
         binding.imageQr.setOnClickListener(v -> openQrFullscreen());
-        binding.btnOpenTicket.setOnClickListener(v -> BrowserUtil.openUrl(requireContext(), lastTicketUrl));
+        binding.btnOpenTicket.setOnClickListener(v -> openTicketInfo());
 
         viewModel.getError().observe(getViewLifecycleOwner(), msg -> {
             if (msg != null && !msg.isEmpty()) {
@@ -95,13 +105,23 @@ public class HomeFragment extends Fragment {
         if (lastTicketUrl == null || lastTicketUrl.isEmpty()) {
             return;
         }
-        QrFullscreenDialog.newInstance(lastTicketUrl, lastCardNumber)
-                .show(getChildFragmentManager(), "qr_fullscreen");
+        QrFullscreenDialog.newInstance(
+                        lastTicketUrl,
+                        lastCardNumber,
+                        lastFullName,
+                        lastCardStatus,
+                        lastValidUntil)
+                .show(getParentFragmentManager(), "qr_fullscreen");
+    }
+
+    private void openTicketInfo() {
+        TicketInfoDialog.newInstance(lastFullName, lastCardNumber, lastCardStatus, lastValidUntil)
+                .show(getParentFragmentManager(), "ticket_info");
     }
 
     private String statusLabel(String status) {
-        if ("ACTIVE".equals(status)) return getString(com.example.applibrary.R.string.status_active);
-        if ("BLOCKED".equals(status)) return getString(com.example.applibrary.R.string.status_blocked);
+        if ("ACTIVE".equals(status)) return getString(R.string.status_active);
+        if ("BLOCKED".equals(status)) return getString(R.string.status_blocked);
         return status;
     }
 

@@ -55,8 +55,13 @@
     <string name="overdue">Просрочено</string>
     <string name="notifications">Уведомления</string>
     <string name="qr_description">QR читательского билета</string>
-    <string name="qr_scan_hint">Нажмите QR или кнопку ниже — откроется читательский билет</string>
-    <string name="open_ticket">Открыть билет</string>
+    <string name="qr_scan_hint">Нажмите QR для увеличения. При сканировании откроется информация о читателе.</string>
+    <string name="open_ticket">Информация о читателе</string>
+    <string name="ticket_info_title">Читательский билет</string>
+    <string name="ticket_info_name_label">ФИО</string>
+    <string name="ticket_info_status_label">Статус</string>
+    <string name="ticket_info_valid_label">QR действует до</string>
+    <string name="ticket_info_hint">Эти данные видит сотрудник библиотеки при сканировании QR-кода.</string>
     <string name="ticket_url_missing">Ссылка на билет недоступна</string>
     <string name="edit_contacts">Изменить контакты</string>
     <string name="address_required">Укажите адрес проживания</string>

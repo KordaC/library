@@ -12,6 +12,7 @@ import com.example.applibrary.data.repository.HealthRepository;
 import com.example.applibrary.data.repository.LoanRepository;
 import com.example.applibrary.data.repository.ProfileRepository;
 import com.example.applibrary.data.repository.RegistrationRepository;
+import com.example.applibrary.data.repository.TicketRepository;
 import com.example.applibrary.util.ProfilePhotoStorage;
 import com.example.applibrary.util.ServerUrlStorage;
 import com.example.applibrary.util.TokenStorage;
@@ -37,6 +38,7 @@ public class AppContainer {
     private final ProfileRepository profileRepository;
     private final EventRepository eventRepository;
     private final HealthRepository healthRepository;
+    private final TicketRepository ticketRepository;
 
     public AppContainer(Context context) {
         tokenStorage = new TokenStorage(context);
@@ -83,6 +85,7 @@ public class AppContainer {
         profileRepository = new ProfileRepository(api);
         eventRepository = new EventRepository(api);
         healthRepository = new HealthRepository(api);
+        ticketRepository = new TicketRepository(api);
     }
 
     public HealthRepository getHealthRepository() {
@@ -127,5 +130,9 @@ public class AppContainer {
 
     public EventRepository getEventRepository() {
         return eventRepository;
+    }
+
+    public TicketRepository getTicketRepository() {
+        return ticketRepository;
     }
 }

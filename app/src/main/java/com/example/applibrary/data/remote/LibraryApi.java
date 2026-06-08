@@ -8,6 +8,7 @@ import com.example.applibrary.data.remote.dto.HealthDtos;
 import com.example.applibrary.data.remote.dto.LoanDtos;
 import com.example.applibrary.data.remote.dto.ProfileDtos;
 import com.example.applibrary.data.remote.dto.RegistrationDtos;
+import com.example.applibrary.data.remote.dto.TicketDtos;
 
 import java.util.List;
 
@@ -52,6 +53,9 @@ public interface LibraryApi {
 
     @GET("cards/me/qr")
     Call<ApiResponse<DashboardDtos.QrResponse>> qr();
+
+    @GET("public/ticket")
+    Call<ApiResponse<TicketDtos.QrCardView>> resolveTicket(@Query("token") String token);
 
     @GET("genres")
     Call<ApiResponse<List<CatalogDtos.GenreItem>>> genres();

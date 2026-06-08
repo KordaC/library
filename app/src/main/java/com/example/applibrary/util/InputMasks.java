@@ -1,15 +1,13 @@
 package com.example.applibrary.util;
 
-import android.app.DatePickerDialog;
-import android.content.Context;
-import android.content.res.Configuration;
-import android.os.Build;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+
+import com.google.android.material.datepicker.CalendarConstraints;
+import com.google.android.material.datepicker.MaterialDatePicker;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -34,7 +32,8 @@ public final class InputMasks {
         field.addTextChangedListener(new DateMaskWatcher());
         field.setFocusable(false);
         field.setClickable(true);
-        field.setOnClickListener(v -> showRussianDatePicker(fragment, field));
+        Runnable showPicker = () -> showRussianDatePicker(fragment, field);
+        field.setOnClickListener(v -> showPicker.run());
     }
 
     public static String normalizePhone(String raw) {
@@ -72,35 +71,34 @@ public final class InputMasks {
         }
     }
 
-    private static void showRussianDatePicker(Fragment fragment, EditText field) {
-        Context ruContext = russianContext(fragment.requireContext());
-        LocalDate initial = parseInitialDate(field.getText() != null ? field.getText().toString() : "");
-
-        DatePickerDialog dialog = new DatePickerDialog(
-                ruContext,
-                (view, year, month, dayOfMonth) -> field.setText(
-                        String.format(RU, "%02d.%02d.%04d", dayOfMonth, month + 1, year)),
-                initial.getYear(),
-                initial.getMonthValue() - 1,
-                initial.getDayOfMonth()
-        );
-        dialog.setTitle("Выберите дату рождения");
-        dialog.getDatePicker().setMaxDate(System.currentTimeMillis());
-        long min = LocalDate.of(1920, 1, 1)
-                .atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli();
-        dialog.getDatePicker().setMinDate(min);
-        dialog.show();
+    public static String formatQrValidUntil(long expEpochSeconds) {
+        if (expEpochSeconds <= 0) return "—";
+        return DateTimeFormatter.ofPattern("d MMMM yyyy, HH:mm", RU)
+                .format(Instant.ofEpochSecond(expEpochSeconds).atZone(ZoneId.systemDefault()));
     }
 
-    @NonNull
-    private static Context russianContext(Context base) {
-        Configuration config = new Configuration(base.getResources().getConfiguration());
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            config.setLocales(new android.os.LocaleList(RU));
-        } else {
-            config.locale = RU;
-        }
-        return base.createConfigurationContext(config);
+    private static void showRussianDatePicker(Fragment fragment, EditText field) {
+        LocalDate initial = parseInitialDate(field.getText() != null ? field.getText().toString() : "");
+        long selection = initial.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli();
+
+        CalendarConstraints constraints = new CalendarConstraints.Builder()
+                .setEnd(System.currentTimeMillis())
+                .setStart(LocalDate.of(1920, 1, 1)
+                        .atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli())
+                .build();
+
+        MaterialDatePicker<Long> picker = MaterialDatePicker.Builder.datePicker()
+                .setTitleText("Выберите дату рождения")
+                .setSelection(selection)
+                .setCalendarConstraints(constraints)
+                .build();
+
+        picker.addOnPositiveButtonClickListener(millis -> {
+            LocalDate date = Instant.ofEpochMilli(millis).atZone(ZoneId.systemDefault()).toLocalDate();
+            field.setText(String.format(RU, "%02d.%02d.%04d",
+                    date.getDayOfMonth(), date.getMonthValue(), date.getYear()));
+        });
+        picker.show(fragment.getParentFragmentManager(), "birth_date_picker");
     }
 
     private static LocalDate parseInitialDate(String display) {

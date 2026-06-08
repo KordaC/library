@@ -1,17 +1,24 @@
 package com.example.applibrary;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.splashscreen.SplashScreen;
 import androidx.core.graphics.Insets;
+import androidx.core.splashscreen.SplashScreen;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.example.applibrary.data.remote.dto.TicketDtos;
+import com.example.applibrary.data.repository.ApiResult;
 import com.example.applibrary.databinding.ActivityMainBinding;
+import com.example.applibrary.ui.ticket.TicketInfoDialog;
+import com.google.android.material.snackbar.Snackbar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
         if (navHost == null) return;
         NavController nav = navHost.getNavController();
 
-        // Проверка входа после отрисовки UI — не блокируем main thread при старте
         binding.getRoot().post(() -> {
             if (savedInstanceState != null) return;
             LibraryApplication app = (LibraryApplication) getApplication();
@@ -41,5 +47,55 @@ public class MainActivity extends AppCompatActivity {
                 nav.navigate(R.id.mainFragment);
             }
         });
+
+        handleTicketIntent(getIntent());
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        handleTicketIntent(intent);
+    }
+
+    private void handleTicketIntent(Intent intent) {
+        if (intent == null || intent.getData() == null) return;
+        Uri uri = intent.getData();
+        String token = uri.getQueryParameter("token");
+        if (token == null || token.isBlank()) return;
+        if (!isTicketPath(uri)) return;
+
+        View anchor = findViewById(R.id.nav_host);
+        if (anchor == null) {
+            anchor = findViewById(android.R.id.content);
+        }
+
+        View snackAnchor = anchor;
+        new Thread(() -> {
+            ApiResult<TicketDtos.QrCardView> result = ((LibraryApplication) getApplication())
+                    .getAppContainer().getTicketRepository().resolveToken(token);
+            runOnUiThread(() -> {
+                if (result instanceof ApiResult.Success) {
+                    TicketDtos.QrCardView view =
+                            ((ApiResult.Success<TicketDtos.QrCardView>) result).getData();
+                    TicketInfoDialog.newInstance(
+                            view.fullName,
+                            view.cardNumber,
+                            view.status,
+                            view.validUntil
+                    ).show(getSupportFragmentManager(), "ticket_scan");
+                } else if (result instanceof ApiResult.Error) {
+                    Snackbar.make(snackAnchor,
+                            ((ApiResult.Error<TicketDtos.QrCardView>) result).getMessage(),
+                            Snackbar.LENGTH_LONG).show();
+                }
+            });
+        }).start();
+        intent.setData(null);
+    }
+
+    private static boolean isTicketPath(Uri uri) {
+        String path = uri.getPath();
+        return path != null && path.contains("/card/ticket");
     }
 }
