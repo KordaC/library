@@ -28,16 +28,8 @@ public class EventsViewModel extends ViewModel {
     public LiveData<List<EventDtos.EventItem>> getEvents() { return events; }
 
     public void load() {
-        loading.setValue(true);
-        new Thread(() -> {
-            ApiResult<List<EventDtos.EventItem>> result = eventRepository.listEvents();
-            if (result instanceof ApiResult.Success) {
-                events.postValue(((ApiResult.Success<List<EventDtos.EventItem>>) result).getData());
-            } else if (result instanceof ApiResult.Error) {
-                error.postValue(((ApiResult.Error<List<EventDtos.EventItem>>) result).getMessage());
-            }
-            loading.postValue(false);
-        }).start();
+        loading.postValue(true);
+        new Thread(this::fetchEvents).start();
     }
 
     public void toggleRegistration(EventDtos.EventItem item) {
@@ -45,6 +37,7 @@ public class EventsViewModel extends ViewModel {
             return;
         }
         actionInProgress = true;
+        loading.postValue(true);
         new Thread(() -> {
             try {
                 ApiResult<?> result = item.registeredByMe
@@ -52,12 +45,23 @@ public class EventsViewModel extends ViewModel {
                         : eventRepository.register(item.id);
                 if (result instanceof ApiResult.Error) {
                     error.postValue(((ApiResult.Error<?>) result).getMessage());
+                    loading.postValue(false);
                 } else {
-                    load();
+                    fetchEvents();
                 }
             } finally {
                 actionInProgress = false;
             }
         }).start();
+    }
+
+    private void fetchEvents() {
+        ApiResult<List<EventDtos.EventItem>> result = eventRepository.listEvents();
+        if (result instanceof ApiResult.Success) {
+            events.postValue(((ApiResult.Success<List<EventDtos.EventItem>>) result).getData());
+        } else if (result instanceof ApiResult.Error) {
+            error.postValue(((ApiResult.Error<List<EventDtos.EventItem>>) result).getMessage());
+        }
+        loading.postValue(false);
     }
 }

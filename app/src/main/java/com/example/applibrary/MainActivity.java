@@ -18,6 +18,7 @@ import com.example.applibrary.data.remote.dto.TicketDtos;
 import com.example.applibrary.data.repository.ApiResult;
 import com.example.applibrary.databinding.ActivityMainBinding;
 import com.example.applibrary.ui.ticket.TicketInfoDialog;
+import com.example.applibrary.util.QrScanUrlHelper;
 import com.google.android.material.snackbar.Snackbar;
 
 public class MainActivity extends AppCompatActivity {
@@ -61,9 +62,8 @@ public class MainActivity extends AppCompatActivity {
     private void handleTicketIntent(Intent intent) {
         if (intent == null || intent.getData() == null) return;
         Uri uri = intent.getData();
-        String token = uri.getQueryParameter("token");
+        String token = QrScanUrlHelper.extractToken(uri);
         if (token == null || token.isBlank()) return;
-        if (!isTicketPath(uri)) return;
 
         View anchor = findViewById(R.id.nav_host);
         if (anchor == null) {
@@ -92,10 +92,5 @@ public class MainActivity extends AppCompatActivity {
             });
         }).start();
         intent.setData(null);
-    }
-
-    private static boolean isTicketPath(Uri uri) {
-        String path = uri.getPath();
-        return path != null && path.contains("/card/ticket");
     }
 }
