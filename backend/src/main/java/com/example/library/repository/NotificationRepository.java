@@ -8,4 +8,5 @@ import java.util.UUID;
 
 public interface NotificationRepository extends JpaRepository<Notification, UUID> {
     List<Notification> findTop5ByUserIdOrderByCreatedAtDesc(UUID userId);
+    boolean existsByUserIdAndDedupKey(UUID userId, String dedupKey);
 }

@@ -1,4 +1,3 @@
--- Дополнительные жанры
 INSERT INTO genre (id, name) VALUES
 ('dddddddd-dddd-dddd-dddd-dddddddddd03', 'Детектив'),
 ('dddddddd-dddd-dddd-dddd-dddddddddd04', 'Фантастика и фэнтези'),
@@ -7,7 +6,6 @@ INSERT INTO genre (id, name) VALUES
 ('dddddddd-dddd-dddd-dddd-dddddddddd07', 'Драма'),
 ('dddddddd-dddd-dddd-dddd-dddddddddd08', 'Детская литература');
 
--- Книги
 INSERT INTO book (id, title, description, publication_year, isbn, author_name) VALUES
 ('eeeeeeee-eeee-eeee-eeee-eeeeeeeeeee3', 'Преступление и наказание', 'Психологический роман', 1866, '978-5-17-000003-3', 'Ф. М. Достоевский'),
 ('eeeeeeee-eeee-eeee-eeee-eeeeeeeeeee4', 'Евгений Онегин', 'Роман в стихах', 1833, '978-5-17-000004-4', 'А. С. Пушкин'),
@@ -51,7 +49,6 @@ INSERT INTO book_copy (id, book_id, inventory_number, status) VALUES
 ('ffffffff-ffff-ffff-ffff-ffffffffff15', 'eeeeeeee-eeee-eeee-eeee-eeeeeeeeee11', 'INV-015', 'AVAILABLE'),
 ('ffffffff-ffff-ffff-ffff-ffffffffff16', 'eeeeeeee-eeee-eeee-eeee-eeeeeeeeee12', 'INV-016', 'AVAILABLE');
 
--- События
 INSERT INTO event (id, title, type, description, starts_at, capacity) VALUES
 ('33333333-3333-3333-3333-333333333303', 'Поэтический вечер', 'READING', 'Чтения современных авторов',
  CAST((CURRENT_DATE + 10) AS TIMESTAMP), 40),

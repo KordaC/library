@@ -11,10 +11,11 @@ server:
 
 library:
   public:
-    # Публичный URL для QR (ngrok / облако). Пример: https://xxxx.ngrok-free.app
     base-url: ${LIBRARY_PUBLIC_BASE_URL:}
   jwt:
     secret: "change-me-in-production-use-256-bit-secret-key!!"
     expiration-hours: 24
   qr:
     secret: "qr-hmac-secret-for-educational-project"
+  firebase:
+    credentials-json: ${FIREBASE_CREDENTIALS_JSON:}

@@ -13,6 +13,7 @@ import androidx.navigation.Navigation;
 
 import com.example.applibrary.BuildConfig;
 import com.example.applibrary.LibraryApplication;
+import com.example.applibrary.MainActivity;
 import com.example.applibrary.R;
 import com.example.applibrary.databinding.FragmentLoginBinding;
 import com.example.applibrary.ui.ViewModelFactory;
@@ -86,6 +87,9 @@ public class LoginFragment extends Fragment {
 
         viewModel.getSuccess().observe(getViewLifecycleOwner(), response -> {
             if (response != null) {
+                if (requireActivity() instanceof MainActivity) {
+                    ((MainActivity) requireActivity()).requestNotificationPermissionIfNeeded();
+                }
                 Navigation.findNavController(binding.getRoot())
                         .navigate(R.id.action_login_to_main);
             }

@@ -1,4 +1,3 @@
-# Облачный запуск (Render, Railway и т.п.)
 spring:
   datasource:
     url: ${SPRING_DATASOURCE_URL:${DATABASE_URL:}}

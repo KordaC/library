@@ -68,7 +68,7 @@ public class TicketInfoDialog extends DialogFragment {
         }
         binding.btnClose.setOnClickListener(v -> dismiss());
         binding.getRoot().setOnClickListener(v -> dismiss());
-        binding.cardPlastic.setOnClickListener(v -> { /* consume */ });
+        binding.cardPlastic.setOnClickListener(v -> {});
         return binding.getRoot();
     }
 

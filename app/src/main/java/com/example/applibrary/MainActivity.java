@@ -2,11 +2,15 @@ package com.example.applibrary;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.core.view.ViewCompat;
@@ -22,6 +26,9 @@ import com.example.applibrary.util.QrScanUrlHelper;
 import com.google.android.material.snackbar.Snackbar;
 
 public class MainActivity extends AppCompatActivity {
+
+    private final ActivityResultLauncher<String> notificationPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), ignored -> {});
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
             if (savedInstanceState != null) return;
             LibraryApplication app = (LibraryApplication) getApplication();
             if (app.getAppContainer().getAuthRepository().isLoggedIn()) {
+                requestNotificationPermissionIfNeeded();
                 nav.navigate(R.id.mainFragment);
             }
         });
@@ -92,5 +100,16 @@ public class MainActivity extends AppCompatActivity {
             });
         }).start();
         intent.setData(null);
+    }
+
+    public void requestNotificationPermissionIfNeeded() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            return;
+        }
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS)
+                == android.content.pm.PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        notificationPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS);
     }
 }

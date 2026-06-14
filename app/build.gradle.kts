@@ -2,6 +2,7 @@ import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.google.services)
 }
 
 val localProperties = Properties().apply {
@@ -51,7 +52,6 @@ fun resolveCloudUrl(local: Properties): String {
     return normalizeApiUrl("https://library-backend-n5c4.onrender.com/api/v1/")
 }
 
-// debug → backend.host (Wi‑Fi / эмулятор), release → backend.url (Render)
 val debugBackendBaseUrl = resolveFromHost(localProperties)
 
 val keystoreProperties = Properties().apply {
@@ -144,6 +144,9 @@ dependencies {
     implementation(libs.splashscreen)
     implementation(libs.coil)
     implementation(libs.browser)
+
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.messaging)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

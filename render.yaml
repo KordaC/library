@@ -1,7 +1,3 @@
-# Один сервис, без PostgreSQL — проще стартует на Render.
-# После деплоя URL: https://library-backend-xxxx.onrender.com
-# В app/cloud-api.properties укажите тот же URL → соберите release APK.
-
 services:
   - type: web
     name: library-backend
@@ -15,3 +11,5 @@ services:
         value: cloud
       - key: JAVA_TOOL_OPTIONS
         value: -XX:+UseContainerSupport -Xmx384m
+      - key: FIREBASE_CREDENTIALS_JSON
+        sync: false

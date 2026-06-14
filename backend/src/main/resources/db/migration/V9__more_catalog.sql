@@ -1,4 +1,3 @@
--- Дополнительные жанры
 INSERT INTO genre (id, name) VALUES
 ('dddddddd-dddd-dddd-dddd-dddddddddd09', 'Биография'),
 ('dddddddd-dddd-dddd-dddd-dddddddddd10', 'Приключения'),
@@ -9,7 +8,6 @@ INSERT INTO genre (id, name) VALUES
 ('dddddddd-dddd-dddd-dddd-dddddddddd15', 'Роман'),
 ('dddddddd-dddd-dddd-dddd-dddddddddd16', 'Юмор и сатира');
 
--- Книги
 INSERT INTO book (id, title, description, publication_year, isbn, author_name) VALUES
 ('eeeeeeee-eeee-eeee-eeee-eeeeeeeeee13', 'Идиот', 'Роман о князе Мышкине', 1869, '978-5-17-000013-3', 'Ф. М. Достоевский'),
 ('eeeeeeee-eeee-eeee-eeee-eeeeeeeeee14', 'Герой нашего времени', 'Роман из пяти повестей', 1840, '978-5-17-000014-4', 'М. Ю. Лермонтов'),

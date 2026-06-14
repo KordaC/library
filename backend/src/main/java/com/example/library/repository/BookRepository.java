@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,4 +20,11 @@ public interface BookRepository extends JpaRepository<Book, UUID> {
             ORDER BY b.title ASC
             """)
     List<Book> search(@Param("q") String q, @Param("genreId") UUID genreId);
+
+    @Query("""
+            SELECT b FROM Book b
+            WHERE b.createdAt >= :since
+            ORDER BY b.createdAt DESC
+            """)
+    List<Book> findCreatedSince(@Param("since") LocalDateTime since);
 }

@@ -39,7 +39,6 @@ public class CardViewController {
         return htmlResponse(html);
     }
 
-    /** Старые QR вели на /card/view — iOS сохранял их как файл «view». */
     @GetMapping("/card/view")
     public ResponseEntity<Void> legacyView(@RequestParam(required = false) String token) {
         String base = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();

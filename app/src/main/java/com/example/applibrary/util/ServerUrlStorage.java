@@ -40,7 +40,6 @@ public class ServerUrlStorage {
         return stored != null && !stored.isBlank();
     }
 
-    /** Приводит ввод к виду https://host/api/v1/ */
     public static String normalize(String input) {
         if (input == null) {
             return "";

@@ -8,9 +8,6 @@ import org.springframework.core.env.MapPropertySource;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Render отдаёт postgresql://... — Spring JDBC ждёт jdbc:postgresql://...
- */
 public class RenderDatabaseEnvironmentPostProcessor implements EnvironmentPostProcessor {
 
     private static final String H2_URL =
@@ -18,8 +15,6 @@ public class RenderDatabaseEnvironmentPostProcessor implements EnvironmentPostPr
 
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
-        // Render часто линкует DATABASE_URL (Postgres) даже при profile cloud.
-        // Spring Boot подставляет его поверх application-cloud.yml — принудительно H2.
         if (isCloudProfile(environment)) {
             Map<String, Object> cloud = new HashMap<>();
             cloud.put("spring.datasource.url", H2_URL);

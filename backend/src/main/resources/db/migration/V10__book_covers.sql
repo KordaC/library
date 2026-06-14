@@ -1,6 +1,5 @@
 ALTER TABLE book ADD COLUMN cover_image_url VARCHAR(512);
 
--- Реальные ISBN для Open Library (covers.openlibrary.org)
 UPDATE book SET isbn = '9780192836778' WHERE id = 'eeeeeeee-eeee-eeee-eeee-eeeeeeeeeee1';
 UPDATE book SET isbn = '9780679760801' WHERE id = 'eeeeeeee-eeee-eeee-eeee-eeeeeeeeeee2';
 UPDATE book SET isbn = '9780486437910' WHERE id = 'eeeeeeee-eeee-eeee-eeee-eeeeeeeeeee3';

@@ -18,6 +18,8 @@ recyclerview = "1.4.0"
 splashscreen = "1.0.1"
 coil = "2.7.0"
 browser = "1.8.0"
+firebaseBom = "33.7.0"
+googleServices = "4.4.2"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -42,7 +44,10 @@ recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version
 splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "splashscreen" }
 coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
 browser = { group = "androidx.browser", name = "browser", version.ref = "browser" }
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
+firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
+google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 

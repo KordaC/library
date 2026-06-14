@@ -1,27 +1,2 @@
-# Скопируйте нужные строки в local.properties (файл уже есть у Android Studio).
-
 sdk.dir=C\:\\Users\\ВАШ_ПОЛЬЗОВАТЕЛЬ\\AppData\\Local\\Android\\Sdk
-
-# --- Разработка (Run / debug APK) — только backend.host ---
-# Эмулятор:
-# backend.host=10.0.2.2
-# Телефон в той же Wi‑Fi, что и ПК (ipconfig → IPv4):
 backend.host=192.168.0.106
-# НЕ указывайте backend.url при локальной разработке — иначе пойдёт в Render!
-
-# --- Release APK для раздачи (мобильный интернет) ---
-# backend.url=https://library-backend-xxxx.onrender.com/api/v1/
-
-# --- Мобильный интернет (LTE) через туннель ---
-# ngrok может быть заблокирован (ERR_NGROK_9040) — тогда Cloudflare:
-#   scripts\start-tunnel-cloudflare.bat  -> https://xxxx.trycloudflare.com
-# Или Tailscale на ПК и телефоне: http://100.x.x.x:8080/api/v1/
-#
-# backend.url=https://xxxx.trycloudflare.com/api/v1/
-#
-# Или отдельно:
-# backend.host=abcd-12-34-56-78.ngrok-free.app
-# backend.https=true
-# backend.port=443
-
-# Адрес можно также сменить в приложении: Профиль → Адрес сервера (без пересборки)

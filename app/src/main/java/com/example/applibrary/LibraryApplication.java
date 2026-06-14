@@ -4,6 +4,8 @@ import android.app.Application;
 
 import com.example.applibrary.di.AppContainer;
 import com.example.applibrary.util.AppSettingsApplier;
+import com.example.applibrary.util.FcmTokenRegistrar;
+import com.example.applibrary.util.PushNotificationHelper;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -17,8 +19,11 @@ public class LibraryApplication extends Application {
     public void onCreate() {
         AppSettingsApplier.apply(this);
         super.onCreate();
-        // Прогрев контейнера в фоне, чтобы не блокировать старт Activity
-        initExecutor.execute(this::getAppContainer);
+        PushNotificationHelper.ensureChannel(this);
+        initExecutor.execute(() -> {
+            getAppContainer();
+            FcmTokenRegistrar.registerIfLoggedIn(this);
+        });
     }
 
     public AppContainer getAppContainer() {
@@ -32,10 +37,10 @@ public class LibraryApplication extends Application {
         return appContainer;
     }
 
-    /** После смены адреса сервера в профиле. */
     public void recreateAppContainer() {
         synchronized (this) {
             appContainer = new AppContainer(getApplicationContext());
+            appContainer.getAuthRepository().attachContext(getApplicationContext());
         }
     }
 }

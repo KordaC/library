@@ -29,6 +29,9 @@ public class Notification {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
+    @Column(name = "dedup_key", length = 200)
+    private String dedupKey;
+
     public UUID getId() { return id; }
     public void setId(UUID id) { this.id = id; }
     public UUID getUserId() { return userId; }
@@ -43,4 +46,6 @@ public class Notification {
     public void setReadFlag(boolean readFlag) { this.readFlag = readFlag; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    public String getDedupKey() { return dedupKey; }
+    public void setDedupKey(String dedupKey) { this.dedupKey = dedupKey; }
 }

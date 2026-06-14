@@ -6,6 +6,7 @@ import com.example.applibrary.data.remote.dto.DashboardDtos;
 import com.example.applibrary.data.remote.dto.EventDtos;
 import com.example.applibrary.data.remote.dto.HealthDtos;
 import com.example.applibrary.data.remote.dto.LoanDtos;
+import com.example.applibrary.data.remote.dto.NotificationDtos;
 import com.example.applibrary.data.remote.dto.ProfileDtos;
 import com.example.applibrary.data.remote.dto.RegistrationDtos;
 import com.example.applibrary.data.remote.dto.TicketDtos;
@@ -93,4 +94,10 @@ public interface LibraryApi {
 
     @DELETE("events/{id}/register")
     Call<ApiResponse<Void>> unregisterEvent(@Path("id") String id);
+
+    @POST("notifications/fcm-token")
+    Call<ApiResponse<Void>> registerFcmToken(@Body NotificationDtos.RegisterFcmTokenRequest request);
+
+    @DELETE("notifications/fcm-token")
+    Call<ApiResponse<Void>> unregisterFcmToken(@Body NotificationDtos.UnregisterFcmTokenRequest request);
 }

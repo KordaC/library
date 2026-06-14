@@ -19,7 +19,6 @@ public final class QrScanUrlHelper {
 
     private QrScanUrlHelper() {}
 
-    /** HTTPS-ссылка для QR и браузера — при сканировании открывается страница билета. */
     public static String resolve(Context context, DashboardDtos.QrResponse qr) {
         return webTicketUrl(context, qr);
     }

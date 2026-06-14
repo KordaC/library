@@ -3,7 +3,6 @@ package com.example.applibrary.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-/** Локальное хранение сессии (токен и краткие данные профиля). */
 public class TokenStorage {
 
     private static final String PREFS = "library_auth";

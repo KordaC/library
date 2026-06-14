@@ -1,4 +1,3 @@
-# Сборка без gradle-wrapper.jar (на Render его часто нет в репозитории)
 FROM gradle:8.10.2-jdk17-alpine AS build
 WORKDIR /app
 COPY build.gradle.kts settings.gradle.kts ./

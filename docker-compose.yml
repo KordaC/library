@@ -1,7 +1,3 @@
-# Нормальная БД PostgreSQL для проекта
-# Запуск: docker compose up -d
-# Остановка: docker compose down
-
 services:
   postgres:
     image: postgres:16-alpine

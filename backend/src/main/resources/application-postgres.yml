@@ -1,6 +1,3 @@
-# PostgreSQL — основная база данных
-# Перед bootRun: docker compose up -d  (из корня проекта)
-
 spring:
   datasource:
     url: jdbc:postgresql://localhost:55432/library

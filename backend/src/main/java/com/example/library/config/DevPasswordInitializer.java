@@ -9,9 +9,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
-/**
- * Гарантирует пароль Demo1234 для демо-пользователя (карта 20001).
- */
 @Component
 @Profile({"dev", "postgres", "file"})
 public class DevPasswordInitializer implements ApplicationRunner {

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Светлая палитра: библиотека — тёмно-синий + золотой акцент -->
     <color name="library_primary">#1B3A5C</color>
     <color name="library_on_primary">#FFFFFF</color>
     <color name="library_primary_container">#D4E4F7</color>

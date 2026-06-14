@@ -13,4 +13,10 @@ public interface LoanRepository extends JpaRepository<Loan, UUID> {
     List<Loan> findByCardIdAndStatusOrderByReturnedAtDesc(UUID cardId, String status);
     long countByCardIdAndStatus(UUID cardId, String status);
     long countByCardIdAndStatusAndDueDateBefore(UUID cardId, String status, LocalDate date);
+    List<Loan> findByCardId(UUID cardId);
+
+    @org.springframework.data.jpa.repository.Query("""
+            SELECT l FROM Loan l WHERE l.status = 'ACTIVE'
+            """)
+    List<Loan> findAllActive();
 }

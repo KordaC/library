@@ -95,7 +95,7 @@ public class QrFullscreenDialog extends DialogFragment {
                 TicketInfoDialog.newInstance(fullName, card, status, validUntil)
                         .show(getParentFragmentManager(), "ticket_info"));
         binding.getRoot().setOnClickListener(v -> dismiss());
-        binding.cardQr.setOnClickListener(v -> { /* consume */ });
+        binding.cardQr.setOnClickListener(v -> {});
     }
 
     @Override

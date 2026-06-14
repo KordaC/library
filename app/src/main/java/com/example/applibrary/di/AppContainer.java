@@ -10,6 +10,7 @@ import com.example.applibrary.data.repository.DashboardRepository;
 import com.example.applibrary.data.repository.EventRepository;
 import com.example.applibrary.data.repository.HealthRepository;
 import com.example.applibrary.data.repository.LoanRepository;
+import com.example.applibrary.data.repository.NotificationRepository;
 import com.example.applibrary.data.repository.ProfileRepository;
 import com.example.applibrary.data.repository.RegistrationRepository;
 import com.example.applibrary.data.repository.TicketRepository;
@@ -39,6 +40,7 @@ public class AppContainer {
     private final EventRepository eventRepository;
     private final HealthRepository healthRepository;
     private final TicketRepository ticketRepository;
+    private final NotificationRepository notificationRepository;
 
     public AppContainer(Context context) {
         tokenStorage = new TokenStorage(context);
@@ -50,7 +52,6 @@ public class AppContainer {
                 ? HttpLoggingInterceptor.Level.BASIC
                 : HttpLoggingInterceptor.Level.NONE);
 
-        // Render free tier: «пробуждение» 30–90 с после простоя
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(90, TimeUnit.SECONDS)
                 .readTimeout(90, TimeUnit.SECONDS)
@@ -78,6 +79,7 @@ public class AppContainer {
 
         api = retrofit.create(LibraryApi.class);
         authRepository = new AuthRepository(api, tokenStorage);
+        authRepository.attachContext(context);
         registrationRepository = new RegistrationRepository(api);
         dashboardRepository = new DashboardRepository(api);
         catalogRepository = new CatalogRepository(api);
@@ -86,6 +88,7 @@ public class AppContainer {
         eventRepository = new EventRepository(api);
         healthRepository = new HealthRepository(api);
         ticketRepository = new TicketRepository(api);
+        notificationRepository = new NotificationRepository(api);
     }
 
     public HealthRepository getHealthRepository() {
@@ -134,5 +137,9 @@ public class AppContainer {
 
     public TicketRepository getTicketRepository() {
         return ticketRepository;
+    }
+
+    public NotificationRepository getNotificationRepository() {
+        return notificationRepository;
     }
 }

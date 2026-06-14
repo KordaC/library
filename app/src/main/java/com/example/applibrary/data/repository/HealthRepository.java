@@ -26,7 +26,6 @@ public class HealthRepository {
         }
     }
 
-    /** Несколько попыток — Render free «просыпается» до 1–2 минут. */
     public boolean waitUntilReady() {
         for (int i = 0; i < WAKE_ATTEMPTS; i++) {
             if (ping()) {

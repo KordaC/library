@@ -1,4 +1,3 @@
--- Демо: вход card=20001 / password=Demo1234
 INSERT INTO user_account (id, email, phone, password_hash, status, created_at) VALUES
 ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'demo@library.local', '+79001234567',
  '$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/X4.G2oEBVHhKzJm2e', 'ACTIVE', CURRENT_TIMESTAMP);
@@ -9,7 +8,6 @@ INSERT INTO reader_profile (user_id, last_name, first_name, middle_name, birth_d
 INSERT INTO library_card (id, card_number, user_id, status, issued_at, registered_at) VALUES
 ('bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', '20001', 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'ACTIVE', CURRENT_DATE, CURRENT_TIMESTAMP);
 
--- Привязка: card 10001, проверка birth_date 1990-05-15
 INSERT INTO library_card (id, card_number, user_id, status, holder_last_name, holder_first_name, holder_birth_date, issued_at) VALUES
 ('cccccccc-cccc-cccc-cccc-ccccccccccc1', '10001', NULL, 'UNASSIGNED', 'Петров', 'Пётр', '1990-05-15', CURRENT_DATE),
 ('cccccccc-cccc-cccc-cccc-ccccccccccc2', '10002', NULL, 'UNASSIGNED', 'Сидоров', 'Сидор', '1985-03-20', CURRENT_DATE);

@@ -35,9 +35,7 @@ public class MainFragment extends Fragment {
         NavigationUI.setupWithNavController(binding.bottomNav, navController);
         NavigationUI.setupWithNavController(binding.toolbar, navController);
 
-        binding.bottomNav.setOnItemReselectedListener(item -> {
-            // не сбрасывать стек при повторном нажатии вкладки
-        });
+        binding.bottomNav.setOnItemReselectedListener(item -> {});
     }
 
     @Override

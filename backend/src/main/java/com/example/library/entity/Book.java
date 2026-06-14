@@ -1,6 +1,7 @@
 package com.example.library.entity;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -26,9 +27,13 @@ public class Book {
     @Column(name = "cover_image_url", length = 512)
     private String coverImageUrl;
 
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+
     @PrePersist
     void prePersist() {
         if (id == null) id = UUID.randomUUID();
+        if (createdAt == null) createdAt = LocalDateTime.now();
     }
 
     public UUID getId() { return id; }
@@ -45,4 +50,6 @@ public class Book {
     public void setIsbn(String isbn) { this.isbn = isbn; }
     public String getCoverImageUrl() { return coverImageUrl; }
     public void setCoverImageUrl(String coverImageUrl) { this.coverImageUrl = coverImageUrl; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }

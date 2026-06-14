@@ -15,4 +15,10 @@ public interface BookGenreRepository extends JpaRepository<BookGenre, BookGenre.
             WHERE bg.bookId = :bookId AND bg.genreId = g.id
             """)
     List<String> findGenreNamesByBookId(@Param("bookId") UUID bookId);
+
+    @Query("SELECT bg.genreId FROM BookGenre bg WHERE bg.bookId = :bookId")
+    List<UUID> findGenreIdsByBookId(@Param("bookId") UUID bookId);
+
+    @Query("SELECT DISTINCT bg.bookId FROM BookGenre bg WHERE bg.genreId IN :genreIds")
+    List<UUID> findBookIdsByGenreIds(@Param("genreIds") List<UUID> genreIds);
 }
